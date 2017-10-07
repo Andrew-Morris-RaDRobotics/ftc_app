@@ -23,12 +23,26 @@ public class OmnidriveTest extends OpMode {
         br = hardwareMap.dcMotor.get("br");
         bl = hardwareMap.dcMotor.get("bl");
     }
-
+        //front left motor is front right motor.
+        //robot goes forward to the right
     @Override
     public void loop() {
-        fr.setPower(-gamepad1.left_stick_y  -gamepad1.left_stick_x -gamepad1.right_stick_x);
-        fl.setPower(gamepad1.left_stick_y -gamepad1.right_stick_x -gamepad1.left_stick_x);
-        br.setPower(gamepad1.left_stick_y +gamepad1.left_stick_x -gamepad1.right_stick_x);
-        bl.setPower(-gamepad1.left_stick_y +gamepad1.left_stick_x -gamepad1.right_stick_x);
+        double frSpeed = gamepad1.left_stick_y  -gamepad1.left_stick_x -gamepad1.right_stick_x;
+        double flSpeed = gamepad1.left_stick_y +gamepad1.right_stick_x -gamepad1.left_stick_x;
+        double brSpeed = -gamepad1.left_stick_y +gamepad1.left_stick_x -gamepad1.right_stick_x;
+        double blSpeed = -gamepad1.left_stick_y +gamepad1.left_stick_x +gamepad1.right_stick_x;
+
+        frSpeed = frSpeed/1.1*5;
+        flSpeed = flSpeed/-0.1*5;
+        brSpeed = brSpeed/1.15*5;
+        blSpeed = blSpeed/-0.8*5;
+
+
+        fr.setPower(frSpeed);
+        fl.setPower(flSpeed);
+        br.setPower(brSpeed);
+        bl.setPower(blSpeed);
+
+
     }
 }
