@@ -6,14 +6,6 @@ import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.configuration.MotorConfigurationType;
 
-
-/**
- * Created by David on 1/1/2016.
- * <p/>
- * To control multiple motors at the same time
- * Note that retaining
- */
-
 public class SyncedDcMotors implements DcMotor {
 
     //constants

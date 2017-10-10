@@ -3,9 +3,6 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-/**
- * Created by Tgodden on 9/30/2017.
- */
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "STANLEY test", group = "testing")
 public class OmnidriveTest extends OpMode {
 

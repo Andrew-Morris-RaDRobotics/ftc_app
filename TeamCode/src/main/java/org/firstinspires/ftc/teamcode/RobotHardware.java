@@ -4,10 +4,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-/**
- * Created by dflor on 8/7/2017.
- */
-
 public class RobotHardware {
     private DcMotor leftMotor;
     private DcMotor rightMotor;
