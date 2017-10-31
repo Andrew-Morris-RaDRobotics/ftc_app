@@ -18,10 +18,14 @@ public class AutonomousTest extends OpMode{
     public void init() {
         fr = hardwareMap.dcMotor.get("fr");
         fl = hardwareMap.dcMotor.get("fl");
-        bl = hardwareMap.dcMotor.get("bl");
-        br = hardwareMap.dcMotor.get("br");
+        br = hardwareMap.dcMotor.get("bl");
+        bl = hardwareMap.dcMotor.get("br");
 
+        br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        br.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+        bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        bl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
 //        fl.setDirection(DcMotor.Direction.FORWARD);
 //        fr.setDirection(DcMotor.Direction.REVERSE);
@@ -47,7 +51,12 @@ public class AutonomousTest extends OpMode{
 //        fl.setPower(.25);
 //        bl.setPower(.25);
 //        br.setPower(-.25);
-        fr.setTargetPosition(1);
+
+        br.setTargetPosition(10/2);
+        br.setPower(0.25);
+
+        bl.setTargetPosition(-10/2);
+        bl.setPower(-0.25);
     }
 
 

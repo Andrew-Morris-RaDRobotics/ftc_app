@@ -19,26 +19,30 @@ public class driveWithControllers extends OpMode {
     Servo theServo;
     @Override
     public void init() {
-        fr = hardwareMap.dcMotor.get("fl");
-        fl = hardwareMap.dcMotor.get("fr");
-        bl = hardwareMap.dcMotor.get("br");
+        fr = hardwareMap.dcMotor.get("fr");
+        fl = hardwareMap.dcMotor.get("fl");
+        bl = hardwareMap.dcMotor.get("bl");
         theServo = hardwareMap.servo.get("servo1");
-        br = hardwareMap.dcMotor.get("bl");
+        br = hardwareMap.dcMotor.get("br");
+
+
+
     }
 
         //robot goes forward to the right
     @Override
     public void loop() {
-        theServo.setPosition((-gamepad1.left_trigger+gamepad1.right_trigger)*(0.5)+0.5);
+        theServo.setPosition((gamepad1.left_trigger+gamepad1.right_trigger)*(0.5)+0.5);
+
         double speed = 0.25;
         speed = speed + gamepad1.right_trigger*0.5;
 
 
         System.out.println(gamepad1.right_bumper);
-        double frSpeed = (speed)*(+gamepad1.left_stick_y +gamepad1.left_stick_x +gamepad1.right_stick_x);
-        double flSpeed = (speed)*(-gamepad1.left_stick_y +gamepad1.left_stick_x +gamepad1.right_stick_x);
-        double brSpeed = (speed)*(+gamepad1.left_stick_y -gamepad1.left_stick_x +gamepad1.right_stick_x);
-        double blSpeed = (speed)*(-gamepad1.left_stick_y -gamepad1.left_stick_x +gamepad1.right_stick_x);
+        double frSpeed = (speed)*(-gamepad1.left_stick_y +gamepad1.left_stick_x +gamepad1.right_stick_x);
+        double flSpeed = (speed)*(+gamepad1.left_stick_y +gamepad1.left_stick_x +gamepad1.right_stick_x);
+        double brSpeed = (speed)*(-gamepad1.left_stick_y -gamepad1.left_stick_x +gamepad1.right_stick_x);
+        double blSpeed = (speed)*(+gamepad1.left_stick_y -gamepad1.left_stick_x +gamepad1.right_stick_x);
 
 //        frSpeed = frSpeed/1.1*5;
 //        flSpeed = flSpeed/-0.1*5;
