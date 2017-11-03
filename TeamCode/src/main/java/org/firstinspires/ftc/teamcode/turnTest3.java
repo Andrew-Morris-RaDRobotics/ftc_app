@@ -29,36 +29,41 @@ public class turnTest3 extends OpMode {
         theServo = hardwareMap.servo.get("servo1");
         br = hardwareMap.dcMotor.get("br");
 
-
-
-
+        telemetry.addLine()
+                .addData("heading", new Func<String>() {
+                    @Override
+                    public String value() {
+                        return String.valueOf(testGyro.getHeading());
+                    }
+                });
     }
 
     //robot goes forward to the right
     @Override
     public void loop() {
+        try {
+            Thread.sleep(10L);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         double heading = testGyro.getHeading();
         double targetDegrees = 90;
         double deadzone = 10;
-        telemetry.addLine()
-                .addData("heading", new Func<String>() {
-                    @Override
-                    public String value() {
-                        return testGyro.getHeading()+"";
-                    }
-                });
+
         telemetry.update();
         if(gamepad1.a) {
-            if (heading > targetDegrees - deadzone && heading < targetDegrees + deadzone) {
-                fl.setPower(0);
-                br.setPower(0);
-            } else if (heading > 100) {
+            if (heading > targetDegrees + deadzone) {
                 fl.setPower(.25);
                 br.setPower(.25);
-            } else if (heading < 80) {
+            } else if (heading < targetDegrees - deadzone) {
                 fl.setPower(-.25);
                 br.setPower(-.25);
+            } else {
+                fl.setPower(0);
+                br.setPower(0);
+
             }
+
         }
         theServo.setPosition((gamepad1.left_trigger+gamepad1.right_trigger)*(0.5)+0.5);
 

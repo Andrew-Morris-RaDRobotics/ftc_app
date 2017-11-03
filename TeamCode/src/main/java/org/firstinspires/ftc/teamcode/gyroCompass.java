@@ -20,7 +20,7 @@ public class gyroCompass {
     private final BNO055IMU imu;
 
     // State used for updating telemetry
-    private final Orientation angles;
+    private Orientation angles;
     private final Acceleration gravity;
 
     public gyroCompass(HardwareMap hardwareMap) {
@@ -42,10 +42,11 @@ public class gyroCompass {
 
         imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
         gravity = imu.getGravity();
-        angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+
     }
 
     public double getHeading(){
+        angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         return AngleUnit.DEGREES.fromUnit(angles.angleUnit, angles.firstAngle);
     }
 
