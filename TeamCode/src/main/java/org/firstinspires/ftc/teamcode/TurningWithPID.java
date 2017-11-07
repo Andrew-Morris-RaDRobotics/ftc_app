@@ -29,7 +29,7 @@ public class TurningWithPID extends OpMode {
         bl = hardwareMap.dcMotor.get("bl");
         theServo = hardwareMap.servo.get("servo1");
         br = hardwareMap.dcMotor.get("br");
-        theServo.setPosition(45);
+
 
 //        telemetry.addLine()
 //                .addData("heading", new Func<String>() {
@@ -52,32 +52,43 @@ public class TurningWithPID extends OpMode {
         double targetDegrees = 90;
         double deadzone = 10;
         double error = targetDegrees - heading;
-        double Kp = 1.0 / 50;
+        double Kp = 1.0 / 150;
         double power = -Kp * error;
 
         telemetry.addData("heading", String.valueOf(testGyro.getHeading()));
         telemetry.addData("Error = ", error);
         telemetry.addData("Power = ", power);
         telemetry.update();
+        double speed = 0.25;
+        speed = speed + gamepad1.right_trigger * 0.5;
+        System.out.println(gamepad1.right_bumper);
 
-        if (gamepad1.a) {
+        if (gamepad1.x) {
 
             fl.setPower(power);
             br.setPower(power);
         }
-        if (gamepad1.left_bumper == true) {
-            theServo.setPosition(90);
+        else if(gamepad1.y){
+            if(heading>0){
+                fl.setPower((-1.0/150) * (180-heading));
+                br.setPower((-1.0/150) * (180-heading));
+            }
+            else {
+                fl.setPower((-1.0/150) * (-180-heading));
+                br.setPower((-1.0/150) * (-180-heading));
+            }
         }
-        else if (gamepad1.right_bumper == true) {
-            theServo.setPosition(0);
+        else if(gamepad1.a){
+
+            fl.setPower((-1.0/150) * (0-heading));
+            br.setPower((-1.0/150) * (0-heading));
+        }
+        else if(gamepad1.b){
+
+            fl.setPower((-1.0/150) * (-90-heading));
+            br.setPower((-1.0/150) * (-90-heading));
         }
         else {
-            theServo.setPosition(45);
-        }
-        double speed = 0.25;
-        speed = speed + gamepad1.right_trigger * 0.5;
-        System.out.println(gamepad1.right_bumper);
-        if (!gamepad1.a) {
             double frSpeed = (speed) * (-gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x);
             double flSpeed = (speed) * (+gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x);
             double brSpeed = (speed) * (-gamepad1.left_stick_y - gamepad1.left_stick_x + gamepad1.right_stick_x);
@@ -87,6 +98,15 @@ public class TurningWithPID extends OpMode {
             fl.setPower(flSpeed);
             br.setPower(brSpeed);
             bl.setPower(blSpeed);
+        }
+        if (gamepad1.left_bumper) {
+            theServo.setPosition(170 / 190.5);
+        }
+        else if (gamepad1.right_bumper) {
+            theServo.setPosition(0);
+        }
+        else {
+            theServo.setPosition(90 / 190.5);
         }
 
 
