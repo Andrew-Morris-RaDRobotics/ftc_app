@@ -52,8 +52,8 @@ public class TurningWithPID extends OpMode {
         double targetDegrees = 90;
         double deadzone = 10;
         double error = targetDegrees - heading;
-        double Kp = 1.0 / 50;
-        double power = -Kp * error;
+        double Kp = 1.0 / 50*2;
+        double power = -Kp * Math.pow(error,2.0);
 
         telemetry.addData("heading", String.valueOf(testGyro.getHeading()));
         telemetry.addData("Error = ", error);
@@ -69,10 +69,10 @@ public class TurningWithPID extends OpMode {
             theServo.setPosition(90);
         }
         else if (gamepad1.right_bumper == true) {
-            theServo.setPosition(0);
+            theServo.setPosition(-90);
         }
         else {
-            theServo.setPosition(45);
+            theServo.setPosition(0);
         }
         double speed = 0.25;
         speed = speed + gamepad1.right_trigger * 0.5;
