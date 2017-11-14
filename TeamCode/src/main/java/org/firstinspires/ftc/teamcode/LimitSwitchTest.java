@@ -14,7 +14,7 @@ public class LimitSwitchTest extends OpMode {
     @Override
     public void init() {
         LimitSwitch = (DigitalChannel) hardwareMap.get("LimitSwitch1");
-        telemetry.addData("", LimitSwitch.getState());
+        telemetry.addData("Reading", LimitSwitch.getState());
     }
 
     @Override

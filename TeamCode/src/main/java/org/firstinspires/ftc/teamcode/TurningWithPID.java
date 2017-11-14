@@ -27,8 +27,8 @@ public class TurningWithPID extends OpMode {
         fr = hardwareMap.dcMotor.get("fr");
         fl = hardwareMap.dcMotor.get("fl");
         bl = hardwareMap.dcMotor.get("bl");
-        theServo = hardwareMap.servo.get("servo1");
         br = hardwareMap.dcMotor.get("br");
+        theServo = hardwareMap.servo.get("servo1");
 
 
 //        telemetry.addLine()
