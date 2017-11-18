@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 
 import org.firstinspires.ftc.robotcore.external.Func;
@@ -22,20 +23,20 @@ public class turnTest3 extends OpMode {
     Servo theServo;
     @Override
     public void init() {
-        testGyro = new gyroCompass(hardwareMap);
+//        testGyro = new gyroCompass(hardwareMap);
         fr = hardwareMap.dcMotor.get("fr");
         fl = hardwareMap.dcMotor.get("fl");
         bl = hardwareMap.dcMotor.get("bl");
         theServo = hardwareMap.servo.get("servo1");
         br = hardwareMap.dcMotor.get("br");
 
-        telemetry.addLine()
-                .addData("heading", new Func<String>() {
-                    @Override
-                    public String value() {
-                        return String.valueOf(testGyro.getHeading());
-                    }
-                });
+//        telemetry.addLine()
+//                .addData("heading", new Func<String>() {
+//                    @Override
+//                    public String value() {
+//                        return String.valueOf(testGyro.getHeading());
+//                    }
+//                });
     }
 
     //robot goes forward to the right
@@ -46,43 +47,43 @@ public class turnTest3 extends OpMode {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        double heading = testGyro.getHeading();
+//        double heading = testGyro.getHeading();
         double targetDegrees = 90;
         double deadzone = 10;
 
         telemetry.update();
-        if(gamepad1.a) {
-            if (heading > targetDegrees + deadzone) {
-                fl.setPower(.25);
-                br.setPower(.25);
-            } else if (heading < targetDegrees - deadzone) {
-                fl.setPower(-.25);
-                br.setPower(-.25);
-            } else {
-                fl.setPower(0);
-                br.setPower(0);
-
-            }
+//        if(gamepad1.a) {
+//            if (heading > targetDegrees + deadzone) {
+//                fl.setPower(.25);
+//                br.setPower(.25);
+//            } else if (heading < targetDegrees - deadzone) {
+//                fl.setPower(-.25);
+//                br.setPower(-.25);
+//            } else {
+//                fl.setPower(0);
+//                br.setPower(0);
+//
+//            }
 
         }
-        theServo.setPosition((gamepad1.left_trigger+gamepad1.right_trigger)*(0.5)+0.5);
-
-        double speed = 0.25;
-        speed = speed + gamepad1.right_trigger*0.5;
-
-
-        System.out.println(gamepad1.right_bumper);
-        if(!gamepad1.a) {
-            double frSpeed = (speed) * (-gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x);
-            double flSpeed = (speed) * (+gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x);
-            double brSpeed = (speed) * (-gamepad1.left_stick_y - gamepad1.left_stick_x + gamepad1.right_stick_x);
-            double blSpeed = (speed) * (+gamepad1.left_stick_y - gamepad1.left_stick_x + gamepad1.right_stick_x);
-
-            fr.setPower(frSpeed);
-            fl.setPower(flSpeed);
-            br.setPower(brSpeed);
-            bl.setPower(blSpeed);
-        }
+//        theServo.setPosition((gamepad1.left_trigger+gamepad1.right_trigger)*(0.5)+0.5);
+//
+//        double speed = 0.25;
+//        speed = speed + gamepad1.right_trigger*0.5;
+//
+//
+//        System.out.println(gamepad1.right_bumper);
+//        if(!gamepad1.a) {
+//            double frSpeed = (speed) * (-gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x);
+//            double flSpeed = (speed) * (+gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x);
+//            double brSpeed = (speed) * (-gamepad1.left_stick_y - gamepad1.left_stick_x + gamepad1.right_stick_x);
+//            double blSpeed = (speed) * (+gamepad1.left_stick_y - gamepad1.left_stick_x + gamepad1.right_stick_x);
+//
+//            fr.setPower(frSpeed);
+//            fl.setPower(flSpeed);
+//            br.setPower(brSpeed);
+//            bl.setPower(blSpeed);
+//        }
 //        frSpeed = frSpeed/1.1*5;
 //        flSpeed = flSpeed/-0.1*5;
 //        brSpeed = brSpeed/1.15*5;
@@ -98,4 +99,4 @@ public class turnTest3 extends OpMode {
 
 
     }
-}
+

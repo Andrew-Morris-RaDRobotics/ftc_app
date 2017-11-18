@@ -13,9 +13,10 @@ public class AutonomousTest extends OpMode{
     public DcMotor fr;
     public DcMotor br;
     public DcMotor bl;
-
+    public GlyphVision test;
     @Override
     public void init() {
+        test = new GlyphVision(hardwareMap);
         fr = hardwareMap.dcMotor.get("fr");
         fl = hardwareMap.dcMotor.get("fl");
         br = hardwareMap.dcMotor.get("bl");
@@ -52,11 +53,15 @@ public class AutonomousTest extends OpMode{
 //        bl.setPower(.25);
 //        br.setPower(-.25);
 
-        br.setTargetPosition(10/2);
-        br.setPower(0.25);
+        //br.setTargetPosition(10/2);
+        //br.setPower(0.25);
 
-        bl.setTargetPosition(-10/2);
-        bl.setPower(-0.25);
+        //bl.setTargetPosition(-10/2);
+        //bl.setPower(-0.25);
+        test.getGlyph();
+        telemetry.addLine(test.getGlyph().toString());
+        telemetry.addLine(test.getPos());
+        telemetry.update();
     }
 
 
