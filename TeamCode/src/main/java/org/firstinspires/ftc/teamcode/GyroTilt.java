@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ReadWriteFile;
@@ -46,24 +47,41 @@ public class GyroTilt extends LinearOpMode
         imu.initialize(parameters);
 
         composeTelemetry();
-        double roll = formatAngle(angles.angleUnit, angles.secondAngle);
-        double pitch = formatAngle(angles.angleUnit, angles.thirdAngle);
+        double pitch=formatAngle(angles.angleUnit, angles.thirdAngle);
+        double roll=formatAngle(angles.angleUnit, angles.secondAngle);
 
-        if (roll > 4 || roll < -2 || pitch > 10 || pitch < 4) {
-            fr.setPower(-1);
-            br.setPower(1);
-        } else {
-            telemetry.addData("Level", "");
+        while (!(roll < 3 && roll > -3 || pitch < 3 && pitch > -3)) {
+            fr.setPower(-0.5);
+            br.setPower(0.5);
+            telemetry.addData("roll", roll);
+            telemetry.addData("pitch", pitch);
+            telemetry.update();
+
+            pitch=formatAngle(angles.angleUnit, angles.thirdAngle);
+            roll=formatAngle(angles.angleUnit, angles.secondAngle);
         }
+         telemetry.addData("Level", "");
+        fr.setPower(0);
+        fl.setPower(0);
+        br.setPower(0);
+        bl.setPower(0);
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
     }
 
     void composeTelemetry() {
 
         angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-        telemetry.addData("roll", formatAngle(angles.angleUnit, angles.secondAngle));
-        telemetry.addData("pitch", formatAngle(angles.angleUnit, angles.thirdAngle));
-    }
+        double roll = formatAngle(angles.angleUnit, angles.secondAngle);
+        double pitch = formatAngle(angles.angleUnit, angles.thirdAngle);
 
+        telemetry.addData("roll", roll);
+        telemetry.addData("pitch", pitch);
+    }
     double formatAngle(AngleUnit angleUnit, double angle) {
         return AngleUnit.DEGREES.fromUnit(angleUnit, angle);
     }
