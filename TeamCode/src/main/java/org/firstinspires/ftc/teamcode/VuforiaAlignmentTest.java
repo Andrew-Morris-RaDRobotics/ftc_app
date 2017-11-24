@@ -1,31 +1,3 @@
-/* Copyright (c) 2017 FIRST. All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted (subject to the limitations in the disclaimer below) provided that
- * the following conditions are met:
- *
- * Redistributions of source code must retain the above copyright notice, this list
- * of conditions and the following disclaimer.
- *
- * Redistributions in binary form must reproduce the above copyright notice, this
- * list of conditions and the following disclaimer in the documentation and/or
- * other materials provided with the distribution.
- *
- * Neither the name of FIRST nor the names of its contributors may be used to endorse or
- * promote products derived from this software without specific prior written permission.
- *
- * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS
- * LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
- * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
- * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -47,6 +19,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
+
 /**
  * This OpMode illustrates the basics of using the Vuforia engine to determine
  * the identity of Vuforia VuMarks encountered on the field. The code is structured as
@@ -58,21 +32,28 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
  * @see VuforiaLocalizer
  * @see VuforiaTrackableDefaultListener
  * see  ftc_app/doc/tutorial/FTC_FieldCoordinateSystemDefinition.pdf
- *
+ * <p>
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list.
- *
+ * <p>
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
  * is explained in {@link ConceptVuforiaNavigation}.
  */
 
-@Autonomous(name="VuforiaTest", group ="Testing")
+//Created by (ง⌐□ل͜□) on 11/24/17
 
-public class VuforiaTest extends LinearOpMode {
+@Autonomous(name = "VuforiaAlignment", group = "Testing")
+
+public class VuforiaAlignmentTest extends LinearOpMode {
 
     public static final String TAG = "Vuforia VuMark Sample";
 
     OpenGLMatrix lastLocation = null;
+
+    public DcMotor fl;
+    public DcMotor fr;
+    public DcMotor br;
+    public DcMotor bl;
 
     /**
      * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
@@ -80,8 +61,13 @@ public class VuforiaTest extends LinearOpMode {
      */
     VuforiaLocalizer vuforia;
 
-    @Override public void runOpMode() {
+    @Override
+    public void runOpMode() {
 
+        fr = hardwareMap.dcMotor.get("fr");
+        fl = hardwareMap.dcMotor.get("fl");
+        bl = hardwareMap.dcMotor.get("bl");
+        br = hardwareMap.dcMotor.get("br");
         /*
          * To start up Vuforia, tell it the view that we wish to use for camera monitor (on the RC phone);
          * If no camera monitor is desired, use the parameterless constructor instead (commented out below).
@@ -149,7 +135,7 @@ public class VuforiaTest extends LinearOpMode {
                 /* For fun, we also exhibit the navigational pose. In the Relic Recovery game,
                  * it is perhaps unlikely that you will actually need to act on this pose information, but
                  * we illustrate it nevertheless, for completeness. */
-                OpenGLMatrix pose = ((VuforiaTrackableDefaultListener)relicTemplate.getListener()).getPose();
+                OpenGLMatrix pose = ((VuforiaTrackableDefaultListener) relicTemplate.getListener()).getPose();
                 telemetry.addData("Pose", format(pose));
 
                 /* We further illustrate how to decompose the pose into useful rotational and
@@ -168,8 +154,53 @@ public class VuforiaTest extends LinearOpMode {
                     double rY = rot.secondAngle;
                     double rZ = rot.thirdAngle;
                 }
-            }
-            else {
+                VectorF trans = pose.getTranslation();
+                Orientation rot = Orientation.getOrientation(pose, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
+                double tX = trans.get(0);
+                double tY = trans.get(1);
+                double rX = rot.firstAngle;
+
+//                double targetX = 0.0;
+//                double targetY = 20.0;
+//                double targetRotation = 0;
+//                double deadzone = 10;
+//                double errorX = targetX - tX;
+//                double errorY = targetY - tY;
+//                double rotationError = targetRotation - rX;
+
+                if (tX > 10) {
+                    fr.setPower(fr.getPower() - 0.5);
+                    br.setPower(br.getPower() + 0.5);
+                } else if (tX < -10) {
+                    fr.setPower(fr.getPower() + 0.5);
+                    br.setPower(br.getPower() - 0.5);
+                } else {
+                    fr.setPower(fr.getPower());
+                    br.setPower(br.getPower());
+                }
+
+                if (tY <= 10) {
+                    fr.setPower(fr.getPower() - 0.5);
+                    fl.setPower(fl.getPower() - 0.5);
+                } else if (tY >= 30) {
+                    fr.setPower(fr.getPower() + 0.5);
+                    fl.setPower(fr.getPower() + 0.5);
+                } else {
+                    fr.setPower(fr.getPower());
+                    fl.setPower(fl.getPower());
+                }
+
+                if (rX > 10) {
+                    fr.setPower(fr.getPower() - 0.5);
+                    fl.setPower(fl.getPower() - 0.5);
+                } else if (rX < -10) {
+                    fr.setPower(fr.getPower() + 0.5);
+                    fl.setPower(fl.getPower() + 0.5);
+                } else {
+                    fr.setPower(fr.getPower());
+                    fl.setPower(fl.getPower());
+                }
+            } else {
                 telemetry.addData("VuMark", "not visible");
             }
 
@@ -181,3 +212,4 @@ public class VuforiaTest extends LinearOpMode {
         return (transformationMatrix != null) ? transformationMatrix.formatAsTransform() : "null";
     }
 }
+
