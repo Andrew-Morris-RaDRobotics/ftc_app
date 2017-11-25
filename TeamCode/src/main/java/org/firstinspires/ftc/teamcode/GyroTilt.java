@@ -19,7 +19,7 @@ import java.io.File;
 import java.util.Locale;
 
 /**
- * Created by DeathChicken & StealthWhale on 11/18/2017.
+ * Created by DeathChicken on 11/18/2017.
  */
 
 @TeleOp(name = "GyroTilt", group = "Testing")
@@ -55,8 +55,8 @@ public class GyroTilt extends OpMode
     public void loop() {
 
 
-         roll = testGyro.getPitch();
-        pitch = testGyro.getRoll();
+         pitch = testGyro.getPitch();
+        roll = -1*(testGyro.getRoll());
         //switched them because im lazy
         asdf = testGyro.getHeading();
         telemetry.addData("roll", roll);
@@ -66,7 +66,7 @@ public class GyroTilt extends OpMode
         xp++;
         telemetry.update();
 
-        if ( (roll > 3) || (roll < -3) || (pitch > 3) || (pitch < -3) ) {
+        if ( (roll > 2) || (roll < -2) || (pitch > 2) || (pitch < -2) ) {
             //ls y = roll
             //ls r = pitch
 //                    try {
@@ -80,10 +80,10 @@ public class GyroTilt extends OpMode
             if(pitch<3 && pitch>-3){
                 pitch = 0;
             }
-            double frSpeed = -(.03) * (-roll + pitch);
-            double flSpeed = -(.03) * (+roll + pitch);
-            double brSpeed = -(.03) * (-roll - pitch);
-            double blSpeed = -(.03) * (+roll - pitch);
+            double frSpeed = -(.032) * (-roll + pitch);
+            double flSpeed = -(.032) * (+roll + pitch);
+            double brSpeed = -(.032) * (-roll - pitch);
+            double blSpeed = -(.032     ) * (+roll - pitch);
 
             fr.setPower(frSpeed);
             fl.setPower(flSpeed);
