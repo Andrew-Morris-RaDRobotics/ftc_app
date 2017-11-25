@@ -5,9 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 
-import org.firstinspires.ftc.robotcore.external.Func;
-
-import java.util.prefs.Preferences;
+import org.firstinspires.ftc.teamcode.utils.gyroCompass;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "turningWithPID", group = "testing")
 public class TurningWithPID extends OpMode {

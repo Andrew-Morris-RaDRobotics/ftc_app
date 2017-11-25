@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.utils;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
@@ -20,8 +20,8 @@ public class gyroCompass {
     private final BNO055IMU imu;
 
     // State used for updating telemetry
-    private final Orientation angles;
-    private final Acceleration gravity;
+    private Orientation angles;
+   // private final Acceleration gravity;
 
     public gyroCompass(HardwareMap hardwareMap) {
 
@@ -37,16 +37,27 @@ public class gyroCompass {
         // Retrieve and initialize the IMU. We expect the IMU to be attached to an I2C port
         // on a Core Device Interface Module, configured to be a sensor of type "AdaFruit IMU",
         // and named "imu".
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        imu = hardwareMap.get(BNO055IMU.class, "imu 1");
         imu.initialize(parameters);
 
-        imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
-        gravity = imu.getGravity();
+       // imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
+        //gravity = imu.getGravity();
         angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+
     }
 
     public double getHeading(){
+        angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         return AngleUnit.DEGREES.fromUnit(angles.angleUnit, angles.firstAngle);
+
     }
 
+    public double getRoll(){
+        angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        return AngleUnit.DEGREES.fromUnit(angles.angleUnit, angles.secondAngle);
+    }
+    public double getPitch(){
+        angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        return AngleUnit.DEGREES.fromUnit(angles.angleUnit, angles.thirdAngle);
+    }
 }

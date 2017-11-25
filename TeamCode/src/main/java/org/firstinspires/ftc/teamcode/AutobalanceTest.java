@@ -16,9 +16,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import java.util.Locale;
 
 
-/**
- * Created by PhantomWolf on 11/18/2017.
- */
 @TeleOp(name = "AutobalanceTest", group = "Testing")
 public class AutobalanceTest extends LinearOpMode {
 
@@ -34,7 +31,7 @@ public class AutobalanceTest extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-
+        angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         fl = hardwareMap.dcMotor.get("fl");
         fr = hardwareMap.dcMotor.get("fr");
         bl = hardwareMap.dcMotor.get("bl");
@@ -80,7 +77,7 @@ public class AutobalanceTest extends LinearOpMode {
             @Override
             public void run() {
 
-                angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+
             }
         });
 
