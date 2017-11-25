@@ -132,6 +132,7 @@ public class VuforiaAlignmentTest extends LinearOpMode {
 //                    fr.setPower(fr.getPower() + 0.2);
 //                    fl.setPower(fr.getPower() + 0.2);
                    // motors.setP(0.02,0,0);
+
                     vert =.1;
                 } else {
 //                    fr.setPower(fr.getPower());
@@ -163,6 +164,8 @@ public class VuforiaAlignmentTest extends LinearOpMode {
                 motors.setP(0.0,0.0,0.0);
             }
 
+
+
             telemetry.update();
         }
     }
@@ -171,4 +174,19 @@ public class VuforiaAlignmentTest extends LinearOpMode {
         return (transformationMatrix != null) ? transformationMatrix.formatAsTransform() : "null";
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
