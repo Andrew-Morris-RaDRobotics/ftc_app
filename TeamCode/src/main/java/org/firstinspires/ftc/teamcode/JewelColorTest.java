@@ -6,9 +6,6 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 
-/**
- * Created by PhantomWolf on 11/18/2017.
- */
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "JewelColorTest", group = "testing")
 

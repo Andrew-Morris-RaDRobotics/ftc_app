@@ -176,10 +176,11 @@ public class SensorBNO055IMU extends LinearOpMode
     //----------------------------------------------------------------------------------------------
 
     String formatAngle(AngleUnit angleUnit, double angle) {
-        return formatDegrees(AngleUnit.DEGREES.fromUnit(angleUnit, angle));
+
+        return formatDegrees(AngleUnit.DEGREES.fromUnit(angles.angleUnit, angles.secondAngle));
     }
 
     String formatDegrees(double degrees){
-        return String.format(Locale.getDefault(), "%.1f", AngleUnit.DEGREES.normalize(degrees));
+        return String.format(Locale.getDefault(), "%.1f", AngleUnit.DEGREES.normalize(AngleUnit.DEGREES.fromUnit(angles.angleUnit, angles.secondAngle)));
     }
 }

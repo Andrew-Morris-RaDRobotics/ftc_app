@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.ChallengeFile;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -6,8 +6,12 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.utils.gyroCompass;
 
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "TeleOpDriving", group = "testing")
-public class TeleOpDriving extends OpMode{
+/**
+ * Created by DeathChicken on 11/22/2017.
+ */
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "DrivingAndServo", group = "Challenge")
+
+public class DrivingAndServo extends OpMode {
 
 
     public DcMotor fl;
@@ -15,18 +19,16 @@ public class TeleOpDriving extends OpMode{
     public DcMotor br;
     public DcMotor bl;
     gyroCompass testGyro;
-    Servo theServo;
+    Servo jewelServo;
 
     @Override
     public void init() {
-       // testGyro = new gyroCompass(hardwareMap);
+        // testGyro = new gyroCompass(hardwareMap);
         fr = hardwareMap.dcMotor.get("fr");
         fl = hardwareMap.dcMotor.get("fl");
         bl = hardwareMap.dcMotor.get("bl");
         br = hardwareMap.dcMotor.get("br");
-        theServo = hardwareMap.servo.get("servo1");
-
-
+        jewelServo = hardwareMap.servo.get("jewelStick");
 
     }
 
@@ -34,33 +36,34 @@ public class TeleOpDriving extends OpMode{
     @Override
     public void loop() {
         try {
-            Thread.sleep(10L);
+            Thread.sleep(100);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-  //      double heading = testGyro.getHeading();
+        //jewelServo.setPosition(.5);
+        //      double heading = testGyro.getHeading();
         double targetDegrees = 90;
         double deadzone = 10;
-   //     double error = targetDegrees - heading;
+        //     double error = targetDegrees - heading;
         double Kp = 1.0 / 150;
-       // double power = -Kp * error;
+        // double power = -Kp * error;
 
- //       telemetry.addData("heading", String.valueOf(testGyro.getHeading()));
-     //   telemetry.addData("Error = ", error);
-     //   telemetry.addData("Power = ", power);
+        //       telemetry.addData("heading", String.valueOf(testGyro.getHeading()));
+        //   telemetry.addData("Error = ", error);
+        //   telemetry.addData("Power = ", power);
         telemetry.update();
         double speed = 0.25;
         speed = speed + gamepad1.right_trigger * 0.5;
-        System.out.println(gamepad1.right_bumper);
+       // System.out.println(gamepad1.right_bumper);
 
-         if(gamepad1.a){
+ //       if (gamepad1.a) {
 
 //            fl.setPower((-1.0/150) * (0-heading));
 //            br.setPower((-1.0/150) * (0-heading));
 
 
-        }
-        else {
+ //       }
+/*        else { */
             double frSpeed = (speed) * (-gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x);
             double flSpeed = (speed) * (+gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x);
             double brSpeed = (speed) * (-gamepad1.left_stick_y - gamepad1.left_stick_x + gamepad1.right_stick_x);
@@ -70,17 +73,24 @@ public class TeleOpDriving extends OpMode{
             fl.setPower(flSpeed);
             br.setPower(brSpeed);
             bl.setPower(blSpeed);
-        }
+  //      }
+
         if (gamepad1.left_bumper) {
-            theServo.setPosition(170 / 190.5);
-        }
-        else if (gamepad1.right_bumper) {
-            theServo.setPosition(0);
-        }
-        else {
-            theServo.setPosition(90 / 190.5);
+            jewelServo.setPosition(0);
+            //jewelStick.setPosition(170 / 190.5);
+        } else if (gamepad1.right_bumper) {
+            jewelServo.setPosition(1);
+            //jewelStick.setPosition(0);
+        } else {
+            jewelServo.setPosition(.5);
+            //jewelStick.setPosition(90 / 190.5);
         }
 
-
-    }}
-
+        try {
+            Thread.sleep(100);
+        }
+        catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}

@@ -44,6 +44,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
+import org.firstinspires.ftc.teamcode.utils.gyroCompass;
 
 import java.util.Locale;
 
@@ -62,7 +63,7 @@ public class TurnTest extends LinearOpMode {
     public DcMotor fr;
     public DcMotor br;
     public DcMotor bl;
-
+    gyroCompass testGyro;
 
 
 

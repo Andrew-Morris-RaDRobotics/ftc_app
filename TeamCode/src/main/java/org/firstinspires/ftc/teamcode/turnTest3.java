@@ -3,12 +3,9 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
 
-import org.firstinspires.ftc.robotcore.external.Func;
-
-import java.util.prefs.Preferences;
+import org.firstinspires.ftc.teamcode.utils.gyroCompass;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "turnTest3", group = "testing")
 public class turnTest3 extends OpMode {

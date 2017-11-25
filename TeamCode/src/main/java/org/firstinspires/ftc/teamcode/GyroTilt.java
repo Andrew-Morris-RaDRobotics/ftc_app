@@ -14,6 +14,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 
+import org.firstinspires.ftc.teamcode.utils.gyroCompass;
 import java.io.File;
 import java.util.Locale;
 
@@ -22,69 +23,108 @@ import java.util.Locale;
  */
 
 @TeleOp(name = "GyroTilt", group = "Testing")
-public class GyroTilt extends LinearOpMode
+public class GyroTilt extends OpMode
 {
     public DcMotor fl;
     public DcMotor fr;
     public DcMotor br;
     public DcMotor bl;
-    BNO055IMU imu;
+    gyroCompass testGyro;
 
-     Orientation angles;
+    double pitch;
+    double roll;
+    double asdf;
+    int xp;
 
-    @Override public void runOpMode() {
+     public void init() {
+         telemetry.addData("Status", "Initialized");
 
+         telemetry.update();
         fr = hardwareMap.dcMotor.get("fr");
         fl = hardwareMap.dcMotor.get("fl");
         bl = hardwareMap.dcMotor.get("bl");
         br = hardwareMap.dcMotor.get("br");
+       // pitch = 0;
+         //roll= 0;
+         testGyro = new gyroCompass(hardwareMap);
+         xp=0;
+      }
 
 
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.loggingEnabled = true;
-        parameters.loggingTag = "IMU";
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
-        imu.initialize(parameters);
+    @Override
+    public void loop() {
 
-        composeTelemetry();
-        double pitch=formatAngle(angles.angleUnit, angles.thirdAngle);
-        double roll=formatAngle(angles.angleUnit, angles.secondAngle);
 
-        while (!(roll < 3 && roll > -3 || pitch < 3 && pitch > -3)) {
-            fr.setPower(-0.5);
-            br.setPower(0.5);
-            telemetry.addData("roll", roll);
-            telemetry.addData("pitch", pitch);
-            telemetry.update();
-
-            pitch=formatAngle(angles.angleUnit, angles.thirdAngle);
-            roll=formatAngle(angles.angleUnit, angles.secondAngle);
-        }
-         telemetry.addData("Level", "");
-        fr.setPower(0);
-        fl.setPower(0);
-        br.setPower(0);
-        bl.setPower(0);
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    void composeTelemetry() {
-
-        angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-        double roll = formatAngle(angles.angleUnit, angles.secondAngle);
-        double pitch = formatAngle(angles.angleUnit, angles.thirdAngle);
-
+         roll = testGyro.getPitch();
+        pitch = testGyro.getRoll();
+        //switched them because im lazy
+        asdf = testGyro.getHeading();
         telemetry.addData("roll", roll);
         telemetry.addData("pitch", pitch);
+        telemetry.addData("heading", asdf);
+        telemetry.addData("test: ", xp);
+        xp++;
+        telemetry.update();
+
+        if ( (roll > 3) || (roll < -3) || (pitch > 3) || (pitch < -3) ) {
+            //ls y = roll
+            //ls r = pitch
+//                    try {
+//            Thread.sleep(500);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+            if(roll<3 && roll>-3){
+                roll = 0;
+            }
+            if(pitch<3 && pitch>-3){
+                pitch = 0;
+            }
+            double frSpeed = -(.02) * (-roll + pitch);
+            double flSpeed = -(.02) * (+roll + pitch);
+            double brSpeed = -(.02) * (-roll - pitch);
+            double blSpeed = -(.02) * (+roll - pitch);
+
+            fr.setPower(frSpeed);
+            fl.setPower(flSpeed);
+            br.setPower(brSpeed);
+            bl.setPower(blSpeed);
+//            br.setPower(0.5);
+//            telemetry.addData("roll", roll);
+//            telemetry.addData("pitch", pitch);
+//            telemetry.update();
+//            pitch = testGyro.getPitch();
+//            roll = testGyro.getRoll();
+            // pitch=formatAngle(angles.angleUnit, angles.thirdAngle);
+            //roll=formatAngle(angles.angleUnit, angles.secondAngle);
+        }
+        else {
+            telemetry.addData("Level", "");
+
+            fr.setPower(0);
+            fl.setPower(0);
+            br.setPower(0);
+            bl.setPower(0);
+        }
+
+
+
+        //telemetry.addData("Level", "");
+//        try {
+//            Thread.sleep(5000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+
     }
-    double formatAngle(AngleUnit angleUnit, double angle) {
-        return AngleUnit.DEGREES.fromUnit(angleUnit, angle);
-    }
+
+//    void composeTelemetry() {
+//
+//
+//        telemetry.addData("roll", roll);
+//        telemetry.addData("pitch", pitch);
+//    }
+
 }
 
 
