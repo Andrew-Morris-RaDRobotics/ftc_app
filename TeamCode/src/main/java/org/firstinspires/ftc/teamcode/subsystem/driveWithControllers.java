@@ -39,10 +39,10 @@ public class driveWithControllers extends OpMode {
 
 
         System.out.println(gamepad1.right_bumper);
-        double frSpeed = (speed)*(-gamepad1.left_stick_y +gamepad1.left_stick_x +gamepad1.right_stick_x);
-        double flSpeed = (speed)*(+gamepad1.left_stick_y +gamepad1.left_stick_x +gamepad1.right_stick_x);
-        double brSpeed = (speed)*(-gamepad1.left_stick_y -gamepad1.left_stick_x +gamepad1.right_stick_x);
-        double blSpeed = (speed)*(+gamepad1.left_stick_y -gamepad1.left_stick_x +gamepad1.right_stick_x);
+        double frSpeed = (speed)*(-gamepad1.left_stick_y +gamepad1.left_stick_x -gamepad1.right_stick_x);
+        double flSpeed = (speed)*(+gamepad1.left_stick_y +gamepad1.left_stick_x -gamepad1.right_stick_x);
+        double brSpeed = (speed)*(-gamepad1.left_stick_y -gamepad1.left_stick_x -gamepad1.right_stick_x);
+        double blSpeed = (speed)*(+gamepad1.left_stick_y -gamepad1.left_stick_x -gamepad1.right_stick_x);
 
 //        frSpeed = frSpeed/1.1*5;
 //        flSpeed = flSpeed/-0.1*5;

@@ -19,7 +19,7 @@ import java.io.File;
 import java.util.Locale;
 
 /**
- * Created by DeathChicken on 11/18/2017.
+ * Created by DeathChicken & StealthWhale on 11/18/2017.
  */
 
 @TeleOp(name = "GyroTilt", group = "Testing")
@@ -80,10 +80,10 @@ public class GyroTilt extends OpMode
             if(pitch<3 && pitch>-3){
                 pitch = 0;
             }
-            double frSpeed = -(.02) * (-roll + pitch);
-            double flSpeed = -(.02) * (+roll + pitch);
-            double brSpeed = -(.02) * (-roll - pitch);
-            double blSpeed = -(.02) * (+roll - pitch);
+            double frSpeed = -(.03) * (-roll + pitch);
+            double flSpeed = -(.03) * (+roll + pitch);
+            double brSpeed = -(.03) * (-roll - pitch);
+            double blSpeed = -(.03) * (+roll - pitch);
 
             fr.setPower(frSpeed);
             fl.setPower(flSpeed);
