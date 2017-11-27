@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.testing;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -23,9 +23,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.teamcode.utils.motorDeclaration;
 
 
-@Autonomous(name = "VuforiaAlignment", group = "Testing")
+@Autonomous(name = "FlippedVuforiaAlignment", group = "Testing")
 
-public class VuforiaAlignmentTest extends LinearOpMode {
+public class FlippedVuforiaAlignmentTest extends LinearOpMode {
 
     public static final String TAG = "Vuforia VuMark Sample";
 
@@ -95,70 +95,65 @@ public class VuforiaAlignmentTest extends LinearOpMode {
                 }
                 VectorF trans = pose.getTranslation();
                 Orientation rot = Orientation.getOrientation(pose, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
-                double tX = trans.get(0);
-                double tY = trans.get(1);
-                double rX = rot.firstAngle;
+                double tX = -(trans.get(0));
+                double tY = -(trans.get(1));
+                double rX = -(rot.firstAngle);
 
-//                double targetX = 0.0;
-//                double targetY = 20.0;
-//                double targetRotation = 0;
-//                double deadzone = 10;
-//                double errorX = targetX - tX;
-//                double errorY = targetY - tY;
-//                double rotationError = targetRotation - rX;
-                double horiz =  0;
-                if (tX > 10) {
-//                    fr.setPower(fr.getPower() - 0.2);
-//                    br.setPower(br.getPower() + 0.2);
-                   // motors.setP(0,-0.02,0);
-                    horiz = -.1;
-                } else if (tX < -10) {
-//                    fr.setPower(fr.getPower() + 0.2);
-//                    br.setPower(br.getPower() - 0.2);
+//                double horiz =  0;
+//                if (tX > 10) {
+//                    horiz = -.1;
+//                } else if (tX < -10) {
+//                    horiz = .1;
+//                } else {
+//                    horiz = 0;
+//                }
+//                double vert = 0;
+//                if (tY <= 10) {
+//                    vert = -.1;
+//                } else if (tY >= 30) {
+//                    vert =.1;
+//                } else {
+//                        vert = 0;
+//                }
+//                double angle = 0;
+//                if (rX > 10) {
+//                    angle = -.1;
+//                } else if (rX < -10) {
+//                    angle = .1;
+//                } else {
+//                    angle =0;
+//                }
 
-                    horiz = .1;
+                double horizOffset = 0.0;
+                if (tX>10) {
+                    horizOffset = -(tX-10);
+                } else if (tX<-10) {
+                    horizOffset = tX+10;
                 } else {
-//                      fr.setPower(fr.getPower());
-//                      br.setPower(br.getPower());
-                    horiz = 0;
+                    horizOffset = 0.0;
                 }
-                double vert = 0;
-                if (tY <= 10) {
-//                    fr.setPower(fr.getPower() - 0.2);
-//                    fl.setPower(fl.getPower() - 0.2);
-                    vert = -.1;
-                    //motors.setP(-0.02,0,0);
-                } else if (tY >= 30) {
-//                    fr.setPower(fr.getPower() + 0.2);
-//                    fl.setPower(fr.getPower() + 0.2);
-                   // motors.setP(0.02,0,0);
 
-                    vert =.1;
+                double vertOffset = 0.0;
+                if (tY>10) {
+                    vertOffset = -(tY-10);
+                } else if (tY<-10){
+                    vertOffset = tY+10;
                 } else {
-//                    fr.setPower(fr.getPower());
-//                    fl.setPower(fl.getPower());
-                        vert = 0;
+                    vertOffset = 0;
                 }
-                double angle = 0;
-                if (rX > 10) {
-                    angle = -.1;
-//                    fr.setPower(fr.getPower() - 0.2);
-//                    fl.setPower(fl.getPower() - 0.2);
-                   // motors.setP(0,0,-0.02);
-                } else if (rX < -10) {
-//                    fr.setPower(fr.getPower() + 0.2);
-//                    fl.setPower(fl.getPower() + 0.2);
-                    angle = .1;
-                   // motors.setP(0,0,0.02);
+
+                double angleOffset = 0.0;
+                if (rX>10) {
+                    angleOffset = -(rX-10);
+                } else if (rX<-10) {
+                    angleOffset = -(rX+10);
                 } else {
-//                    fr.setPower(fr.getPower());
-//                    fl.setPower(fl.getPower());
-                    angle =0;
+                    angleOffset = 0;
                 }
-                motors.setP(vert, horiz, angle);
-                telemetry.addData("rotation: ",rX);
-                telemetry.addData("Horiz", tX);
-                telemetry.addData("Vert", tY);
+                motors.setP(vertOffset, horizOffset, angleOffset);
+                telemetry.addData("Angle Offset",rX);
+                telemetry.addData("Horizontal Offset", tX);
+                telemetry.addData("Frontal Offset", tY);
             } else {
                 telemetry.addData("VuMark", "not visible");
                 motors.setP(0.0,0.0,0.0);
@@ -174,19 +169,5 @@ public class VuforiaAlignmentTest extends LinearOpMode {
         return (transformationMatrix != null) ? transformationMatrix.formatAsTransform() : "null";
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
