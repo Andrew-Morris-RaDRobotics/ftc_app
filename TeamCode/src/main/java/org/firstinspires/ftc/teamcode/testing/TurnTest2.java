@@ -32,8 +32,7 @@ package org.firstinspires.ftc.teamcode.testing;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
-
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.utils.motorDeclaration;
 
 import java.util.Locale;
@@ -41,25 +40,43 @@ import java.util.Locale;
 @Autonomous(name = "TurnTest2", group = "Sensor")
 public class TurnTest2 extends LinearOpMode {
 
-    public motorDeclaration motors = new motorDeclaration(hardwareMap);
 
-    DcMotor fr = hardwareMap.get(DcMotor.class,"fr");
-    DcMotor fl = hardwareMap.get(DcMotor.class,"fl");
-    DcMotor bl = hardwareMap.get(DcMotor.class,"bl");
-    DcMotor br = hardwareMap.get(DcMotor.class,"br");
-    //leftDrive  = hwMap.get(DcMotor.class, "left_drive");
-    //rightDrive = hwMap.get(DcMotor.class, "right_drive");
-
-//        fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//
-//        fr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
     @Override
     public void runOpMode() throws InterruptedException {
+        motorDeclaration motors = new motorDeclaration(hardwareMap);
+       DcMotor fl = hardwareMap.dcMotor.get("fl");
+        DcMotor fr = hardwareMap.dcMotor.get("fr");
+       DcMotor bl = hardwareMap.dcMotor.get("bl");
+       DcMotor br = hardwareMap.dcMotor.get("br");
+        int x = 0;
 
-        motors.setP(.3,0,0);
+        br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        fr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+
+
+        waitForStart();
+        while(opModeIsActive()) {
+            motors.setP(.3, 0, 0);
+            int position = fr.getCurrentPosition();
+            int position1 = br.getCurrentPosition();
+            int position2 = bl.getCurrentPosition();
+            int poisiton3 = fl.getCurrentPosition();
+
+//            fr.setPower(0.3);
+//            br.setPower(0.3);
+            telemetry.addData("Encoder Position 1", position1);
+            telemetry.addData("Encoder Position", position);
+            telemetry.addData("Encoder Position 2", position2);
+            telemetry.addData("Encoder Position 3", poisiton3);
+            telemetry.addData("test", x);
+            x++;
+            telemetry.update();
+        }
     }
 }
 
