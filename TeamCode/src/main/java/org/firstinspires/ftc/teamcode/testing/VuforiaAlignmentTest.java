@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.testing;
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -20,7 +20,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefau
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-
 import org.firstinspires.ftc.teamcode.utils.motorDeclaration;
 
 
@@ -100,65 +99,72 @@ public class VuforiaAlignmentTest extends LinearOpMode {
                 double tY = trans.get(1);
                 double rX = rot.firstAngle;
 
-//                double horiz =  0;
+//                double targetX = 0.0;
+//                double targetY = 20.0;
+//                double targetRotation = 0;
+//                double deadzone = 10;
+//                double errorX = targetX - tX;
+//                double errorY = targetY - tY;
+//                double rotationError = targetRotation - rX;
+                double horiz =  -tX;
 //                if (tX > 10) {
+////                    fr.setPower(fr.getPower() - 0.2);
+////                    br.setPower(br.getPower() + 0.2);
+//                   // motors.setP(0,-0.02,0);
 //                    horiz = -.1;
 //                } else if (tX < -10) {
+////                    fr.setPower(fr.getPower() + 0.2);
+////                    br.setPower(br.getPower() - 0.2);
+//
 //                    horiz = .1;
+
 //                } else {
+//                      fr.setPower(fr.getPower());
+//                      br.setPower(br.getPower());
 //                    horiz = 0;
-//                }
-//                double vert = 0;
+
+                double vert = -tY;
 //                if (tY <= 10) {
+////                    fr.setPower(fr.getPower() - 0.2);
+////                    fl.setPower(fl.getPower() - 0.2);
 //                    vert = -.1;
+//                    //motors.setP(-0.02,0,0);
 //                } else if (tY >= 30) {
+////                    fr.setPower(fr.getPower() + 0.2);
+////                    fl.setPower(fr.getPower() + 0.2);
+//                   // motors.setP(0.02,0,0);
+//
 //                    vert =.1;
 //                } else {
+////                    fr.setPower(fr.getPower());
+////                    fl.setPower(fl.getPower());
 //                        vert = 0;
 //                }
-//                double angle = 0;
+                double angle = rX;
 //                if (rX > 10) {
 //                    angle = -.1;
+////                    fr.setPower(fr.getPower() - 0.2);
+////                    fl.setPower(fl.getPower() - 0.2);
+//                   // motors.setP(0,0,-0.02);
 //                } else if (rX < -10) {
+////                    fr.setPower(fr.getPower() + 0.2);
+////                    fl.setPower(fl.getPower() + 0.2);
 //                    angle = .1;
+//                   // motors.setP(0,0,0.02);
 //                } else {
+////                    fr.setPower(fr.getPower());
+////                    fl.setPower(fl.getPower());
 //                    angle =0;
 //                }
-
-                double horizOffset = 0.0;
-                if (tX > 10) {
-                    horizOffset = -(tX - 10);
-                } else if (tX < -10) {
-                    horizOffset = tX + 10;
-                } else {
-                    horizOffset = 0.0;
-                }
-
-                double vertOffset = 0.0;
-                if (tY > 10) {
-                    vertOffset = -(tY - 10);
-                } else if (tY < -10) {
-                    vertOffset = tY + 10;
-                } else {
-                    vertOffset = 0;
-                }
-
-                double angleOffset = 0.0;
-                if (rX > 10) {
-                    angleOffset = -(rX - 10);
-                } else if (rX < -10) {
-                    angleOffset = -(rX + 10);
-                } else {
-                    angleOffset = 0;
-                }
-                motors.setP(vertOffset, horizOffset, angleOffset);
-                telemetry.addData("Angle Offset", rX);
+                motors.setP(vert, horiz, angle);
+                telemetry.addData("Angle Error: ",rX);
                 telemetry.addData("Horizontal Offset", tX);
-                telemetry.addData("Frontal Offset", tY);
+                telemetry.addData("Vertical Offset", tY);
             } else {
                 telemetry.addData("VuMark", "not visible");
-                motors.setP(0.0, 0.0, 0.0);
+                motors.setP(0.0,0.0,0.0);
             }
+
 
 
             telemetry.update();
