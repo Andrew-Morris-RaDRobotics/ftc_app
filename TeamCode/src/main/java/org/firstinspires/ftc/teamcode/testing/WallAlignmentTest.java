@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.testing;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -19,28 +19,40 @@ import org.firstinspires.ftc.teamcode.utils.motorDeclaration;
 
 import java.util.Locale;
 
+//Note-all of the commented out sections of the code below are functional, but must utilize two distance sensors (not one)
 @Autonomous(name = "WallAlignment", group = "testing")
 public class WallAlignmentTest extends LinearOpMode {
     public motorDeclaration motors;
-    DistanceSensor sensorDistance;
+    DistanceSensor sensorDistanceLeft;
+//    DistanceSensor sensorDistanceRight;
     gyroCompass imu;
 
     @Override
     public void runOpMode() {
         motors = new motorDeclaration(hardwareMap);
-        sensorDistance = hardwareMap.get(DistanceSensor.class, "colordistance1");
+        sensorDistanceLeft = hardwareMap.get(DistanceSensor.class, "colordistance1");
+//        sensorDistance = hardwareMap.get(DistanceSensor.class, "colordistance2");
         imu = new gyroCompass(hardwareMap);
 
-        double distance = sensorDistance.getDistance(DistanceUnit.INCH);
+        double distanceLeft = sensorDistanceLeft.getDistance(DistanceUnit.INCH);
+//        double distanceRight = sensorDistanceRight.getDistance(DistanceUnit.INCH);
         double heading = imu.getHeading();
 
-        while (distance > 16) {
+        while (distanceLeft > 16) {
             motors.setP(0, 0, 0.2);
         }
 
         double targetDistance = 10;
         double distanceDeadzone = 5;
-        double distanceError = targetDistance - distance;
+        double distanceError = targetDistance - distanceLeft;
+
+//        while (distanceLeft!=distanceRight){
+//            if (distanceLeft>distanceRight){
+//                motors.setP(0,0,0.2);
+//            } else {
+//                motors.setP(0,0,-0.2);
+//            }
+//        }
 
         while (distanceError > distanceDeadzone || distanceError < -distanceDeadzone) {
             if (distanceError > distanceDeadzone) {
