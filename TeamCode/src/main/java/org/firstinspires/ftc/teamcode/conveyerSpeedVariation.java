@@ -9,35 +9,44 @@ import com.qualcomm.robotcore.hardware.DcMotor;
  */
 @TeleOp(name = "conveyerSpeedVariation", group = "Mechanical")
 public class conveyerSpeedVariation extends OpMode {
-    public DcMotor rightConveyer;
+    private DcMotor topConveyer;
+    private DcMotor bottomConveyer;
     @Override
     public void init() {
-        rightConveyer = hardwareMap.dcMotor.get("rightConveyer");
+        topConveyer = hardwareMap.dcMotor.get("topConveyer");
+        bottomConveyer = hardwareMap.dcMotor.get("bottomConveyer");
     }
 
     @Override
     public void loop() {
 
         if (gamepad1.a) {
-            rightConveyer.setPower(-0.8);
+            topConveyer.setPower(-0.8);
+            bottomConveyer.setPower(-0.8);
         }
         else if (gamepad1.x) {
-            rightConveyer.setPower(-0.6);
+            topConveyer.setPower(-0.6);
+            bottomConveyer.setPower(-0.6);
         }
         else if (gamepad1.y) {
-            rightConveyer.setPower(-0.4);
+            topConveyer.setPower(-0.4);
+            bottomConveyer.setPower(-0.4);
         }
         else  if (gamepad1.b) {
-            rightConveyer.setPower(-0.2);
+            topConveyer.setPower(-0.2);
+            bottomConveyer.setPower(-0.2);
         }
         else if (gamepad1.left_bumper) {
-            rightConveyer.setPower(1);
+            topConveyer.setPower(1);
+            bottomConveyer.setPower(1);
         }
         else if (gamepad1.right_bumper) {
-            rightConveyer.setPower(-1);
+            topConveyer.setPower(-1);
+            bottomConveyer.setPower(-1);
         }
         else {
-            rightConveyer.setPower(0);
+            topConveyer.setPower(0);
+            bottomConveyer.setPower(0);
             telemetry.addData("Press the B button for 20% power", "");
             telemetry.addData("Press the Y button for 40% power", "");
             telemetry.addData("Press the X button for 60% power", "");

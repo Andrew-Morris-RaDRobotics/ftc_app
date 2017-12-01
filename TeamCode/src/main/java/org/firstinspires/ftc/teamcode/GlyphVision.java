@@ -46,7 +46,7 @@ public class GlyphVision {
         relicTrackables.activate();
 
     }
-    public RelicRecoveryVuMark getGlyph(){
+    public RelicRecoveryVuMark getGlyph() {
         RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
 
         return vuMark;
