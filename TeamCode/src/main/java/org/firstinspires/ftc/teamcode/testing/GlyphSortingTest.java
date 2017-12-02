@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.testing;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 
@@ -9,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 
 public class GlyphSortingTest extends OpMode {
 
-    ColorSensor colorSensor;
+    private ColorSensor colorSensor;
 
     @Override
     public void init() {
