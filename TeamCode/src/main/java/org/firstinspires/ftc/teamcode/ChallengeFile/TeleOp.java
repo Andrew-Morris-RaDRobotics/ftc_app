@@ -56,7 +56,7 @@ public class TeleOp extends OpMode {
             fwopperDrive.setPower(-0.2);
         }
 
-        double intakeSpeed = gamepad1.left_trigger;
+        double intakeSpeed = gamepad1.left_trigger-gamepad1.right_trigger;
         intakeDrive.setPower(intakeSpeed);
 
         // Code using the second gamepad (for the operator/robot controller).

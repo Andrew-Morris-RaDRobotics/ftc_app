@@ -55,7 +55,7 @@ public class JewelArmTest extends LinearOpMode {
 
         waitForStart();
 
-        jewelStick.setPosition(0.4);
+        jewelStick.setPosition(1);
         int completed =  0;
         int color = 0; //1 is red 2 is blu (left side)
         double curr = 0.0;
@@ -91,14 +91,14 @@ public class JewelArmTest extends LinearOpMode {
                 double target = curr+10;
                // if(testGyro.getHeading()<target && stage==0) {
                 if(stage<2){
-                    Motors.setP(0, 0, (target-testGyro.getHeading())/5);
+                    Motors.setP(0, 0, -(target-testGyro.getHeading())/55);
                }
                 if(testGyro.getHeading()>=target && stage==0){
                     target=curr;
                     jewelStick.setPosition(0);
                     stage++;
                 }
-                if(stage==1 && testGyro.getHeading()<=target+.5){
+                if(stage==1 && testGyro.getHeading()<=target+1 && testGyro.getHeading()>=target-1){
                     stage++;
                     Motors.setP(0,0,0);
                 }
@@ -108,14 +108,14 @@ public class JewelArmTest extends LinearOpMode {
                 double target = curr-10;
                 //if(testGyro.getHeading()<target && stage==0) {
                 if(stage<2) {
-                    Motors.setP(0, 0, (target - testGyro.getHeading()) / 5);
+                    Motors.setP(0, 0, -(target - testGyro.getHeading()) / 55);
                 } //}
                 if(testGyro.getHeading()<target && stage==0){
                     target=curr;
                     jewelStick.setPosition(0);
                     stage++;
                 }
-                if(stage==1 && testGyro.getHeading()>target-.5){
+                if(stage==1 && testGyro.getHeading()>=target-1&& testGyro.getHeading()<=target+1){
                     stage++;
                     Motors.setP(0,0,0);
                 }
