@@ -4,6 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.utils.gyroCompass;
+
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "TeleOp", group = "ChallengeFile")
 public class TeleOp extends OpMode {
 
@@ -18,12 +20,15 @@ public class TeleOp extends OpMode {
     DcMotor intakeDrive;
     DcMotor fwopperDrive;
     DcMotor conveyor;
+gyroCompass testGyro;
 
     Servo intakeBucket;
     Servo jewelStick;
     int floppers;
     double position;
     int conveyorP;
+    boolean balanceEnabled;
+    boolean offBalance;
     @Override
     public void init() {
         jewelStick = hardwareMap.servo.get("jewelStick");
@@ -40,6 +45,8 @@ public class TeleOp extends OpMode {
         conveyorP=0;
         floppers = 0;
         position=0.0;
+        testGyro = new gyroCompass(hardwareMap);
+        balanceEnabled=true;
     }
 
     @Override
@@ -54,10 +61,12 @@ public class TeleOp extends OpMode {
         double flSpeed = (speed) * -(+gamepad1.left_stick_y - gamepad1.left_stick_x - gamepad1.right_stick_x);
         double brSpeed = (speed) * -(-gamepad1.left_stick_y  + gamepad1.left_stick_x - gamepad1.right_stick_x);
         double blSpeed = (speed) * -(+gamepad1.left_stick_y + gamepad1.left_stick_x - gamepad1.right_stick_x);
-        fr.setPower(frSpeed);
-        fl.setPower(flSpeed);
-        br.setPower(brSpeed);
-        bl.setPower(blSpeed);
+       //if(offBalance&&balanceEnabled) {
+           fr.setPower(frSpeed);
+           fl.setPower(flSpeed);
+           br.setPower(brSpeed);
+           bl.setPower(blSpeed);
+      // }
 
 //conveyor
         if (gamepad2.dpad_down) {
@@ -115,6 +124,70 @@ public class TeleOp extends OpMode {
         telemetry.update();
         intakeBucket.setPosition(.68-(gamepad2.left_trigger*.5));
         jewelStick.setPosition(.5+gamepad1.left_trigger);
+
+
+
+
+       double pitch = testGyro.getPitch();
+       double roll = -1*(testGyro.getRoll());
+        //switched them because im lazy
+       // asdf = testGyro.getHeading();
+        //telemetry.addData("roll", roll);
+       // telemetry.addData("pitch", pitch);
+       // telemetry.addData("heading", asdf);
+       // telemetry.addData("test: ", xp);
+       // xp++;
+      //  telemetry.update();
+/*
+        if ( (roll > 2) || (roll < -2) || (pitch > 2) || (pitch < -2) ) {
+            offBalance=true;
+            //ls y = roll
+            //ls r = pitch
+//                    try {
+//            Thread.sleep(500);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+            if(roll<3 && roll>-3){
+                roll = 0;
+            }
+            if(pitch<3 && pitch>-3){
+                pitch = 0;
+            }
+
+            if(gamepad1.a){
+                balanceEnabled=true;
+            }
+            if(gamepad1.b){
+                balanceEnabled=false;
+            }
+            if(balanceEnabled) {
+                fr.setPower(-(.032) * (-roll + pitch));
+                fl.setPower(-(.032) * (+roll + pitch));
+                br.setPower(-(.032) * (-roll - pitch));
+                bl.setPower(-(.032) * (+roll - pitch));
+            }
+
+//            br.setPower(0.5);
+//            telemetry.addData("roll", roll);
+//            telemetry.addData("pitch", pitch);
+//            telemetry.update();
+//            pitch = testGyro.getPitch();
+//            roll = testGyro.getRoll();
+            // pitch=formatAngle(angles.angleUnit, angles.thirdAngle);
+            //roll=formatAngle(angles.angleUnit, angles.secondAngle);
+        }
+        else {
+            telemetry.addData("Level", "");
+offBalance=false;
+
+        }
+*/
+
+
+        //telemetry.addData("Level", "");
+//        dsadddddddddddddddddddddd
+
 //        double intakeSpeed = gamepad1.left_trigger-gamepad1.right_trigger;
 //        intakeDrive.setPower(intakeSpeed);
 

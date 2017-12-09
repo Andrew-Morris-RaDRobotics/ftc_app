@@ -98,8 +98,8 @@ public class JewelArmTest extends LinearOpMode {
                 telemetry.update();
 
                // if(testGyro.getHeading()<target && stage==0) {
-                if(stage<2){
-                    Motors.setP(0, 0, -(target-testGyro.getHeading())/50);
+                if(stage<1){
+                    Motors.setP(0, 0, (target-testGyro.getHeading())/50);
                }
                 if(testGyro.getHeading()>=target && stage==0){
                     target=curr;
@@ -120,8 +120,8 @@ public class JewelArmTest extends LinearOpMode {
                 telemetry.addData("stage",stage);
                 telemetry.update();
                 //if(testGyro.getHeading()<target && stage==0) {
-                if(stage<2) {
-                    Motors.setP(0, 0, -(target - testGyro.getHeading()) / 50);
+                if(stage<1) {
+                    Motors.setP(0, 0, (target - testGyro.getHeading()) / 50);
                 } //}
                 if(testGyro.getHeading()<target && stage==0){
                     target=curr;
