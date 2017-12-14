@@ -91,7 +91,7 @@ public class JewelArmTest extends LinearOpMode {
                 double target = curr+10;
                // if(testGyro.getHeading()<target && stage==0) {
                 if(stage<2){
-                    Motors.setP(0, 0, (target-testGyro.getHeading())/5);
+                    Motors.setP(0, 0, -(target-testGyro.getHeading())/50);
                }
                 if(testGyro.getHeading()>=target && stage==0){
                     target=curr;
@@ -108,7 +108,7 @@ public class JewelArmTest extends LinearOpMode {
                 double target = curr-10;
                 //if(testGyro.getHeading()<target && stage==0) {
                 if(stage<2) {
-                    Motors.setP(0, 0, (target - testGyro.getHeading()) / 5);
+                    Motors.setP(0, 0, -(target - testGyro.getHeading()) / 50);
                 } //}
                 if(testGyro.getHeading()<target && stage==0){
                     target=curr;
