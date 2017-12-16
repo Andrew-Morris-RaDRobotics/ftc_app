@@ -75,7 +75,8 @@ public class BlueJewelRight extends LinearOpMode {
                 telemetry.addData("color:", color);
                 telemetry.update();
 
-                if (leftJewel.red() - 1 > rightJewel.red() && rightJewel.blue() - 1 > leftJewel.blue()) {
+                if (leftJewel.red() - 1
+                        > rightJewel.red() && rightJewel.blue() - 1 > leftJewel.blue()) {
                     telemetry.addData("left side is red", "right side is blue");
                     color = 1;
                     curr = testGyro.getHeading();

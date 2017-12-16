@@ -15,6 +15,7 @@ public class turnTo {
     private DcMotor bl;
     private gyroCompass gyro;
     private double sumError;
+    private double prev;
     public turnTo(HardwareMap hardwareMap, gyroCompass gyroscope) {
 
         fr = hardwareMap.dcMotor.get("fr");
@@ -25,9 +26,9 @@ public class turnTo {
         sumError=0;
     }
 
-    public double turnT(double target,double p,double i, double deadZone){
+    public boolean turnT(double target,double p,double i, double d,double deadZone){
         double curr = gyro.getHeading();
-        double error = curr-target;
+        double error = target-curr;
 
         if(error>180){
             error = (360-error);
@@ -37,16 +38,17 @@ public class turnTo {
         }
 
         if(Math.abs(error)<8){
-            sumError+=error;
+            sumError+=error/50;
         }
 
-        double power = error*p +sumError*i;
+        double power = error*p  + sumError*i + d*(error-prev);//-10 - -11
         setP(power);
+        prev=error;
         if(Math.abs(error)<deadZone){
-            return power;
+            return true;
         }
         else{
-            return error;
+            return false;
         }
 
     }
@@ -56,11 +58,12 @@ public class turnTo {
 //        br.setPower(-powerF -powerS);
 //        bl.setPower(powerF-powerS);
 //    }
-    public void setP(double turn){
-        fr.setPower(turn);
-        fl.setPower(turn);
-        br.setPower(turn);
-        bl.setPower(turn);
+    public void setP(double test){
+        fr.setPower(test);
+        fl.setPower(test);
+        br.setPower(test);
+        bl.setPower(test);
+
     }
 
 

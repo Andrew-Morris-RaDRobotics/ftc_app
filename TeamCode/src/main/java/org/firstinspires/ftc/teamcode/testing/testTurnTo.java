@@ -16,7 +16,10 @@ import org.firstinspires.ftc.teamcode.utils.turnTo;
 
 public class testTurnTo extends LinearOpMode {
 
-
+    public DcMotor fr;
+    public DcMotor fl;
+    public DcMotor bl;
+    public DcMotor br;
     public gyroCompass testGyro;
     public turnTo turn;
     ElapsedTime runtime = new ElapsedTime();
@@ -25,10 +28,21 @@ public class testTurnTo extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         testGyro = new gyroCompass(hardwareMap);
         turn = new turnTo(hardwareMap,testGyro);
-
+       boolean test = false;
+        fr = hardwareMap.dcMotor.get("fr");
+        fl = hardwareMap.dcMotor.get("fl");
+        bl = hardwareMap.dcMotor.get("bl");
+        br = hardwareMap.dcMotor.get("br");
         while (opModeIsActive()) {
-        telemetry.addData("turnP: ",
-            turn.turnT(10.0,1/40,1/1000,1));
+            if(!test) {
+                test = turn.turnT(-20.0, 0.015, .00005, .04, 1);
+            }
+            else{
+                telemetry.addData("done!","yeet");
+            }
+
+        telemetry.addData("turnP: ",test);
+            telemetry.addData("gyro ",testGyro.getHeading());
             telemetry.update();
             //turn.turnT(10.0,1/40,1/1000,1);
         }
