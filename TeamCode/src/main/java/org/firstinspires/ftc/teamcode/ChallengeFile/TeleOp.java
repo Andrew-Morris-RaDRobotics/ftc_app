@@ -29,6 +29,9 @@ gyroCompass testGyro;
     int conveyorP;
     boolean balanceEnabled;
     boolean offBalance;
+
+//    Servo leftSorter;
+//    Servo rightSorter;
     @Override
     public void init() {
         jewelStick = hardwareMap.servo.get("jewelStick");
@@ -42,6 +45,8 @@ gyroCompass testGyro;
         intakeDrive = hardwareMap.dcMotor.get("intakeDrive");
         fwopperDrive = hardwareMap.dcMotor.get("fwopperDrive");
         conveyor = hardwareMap.dcMotor.get("conveyer");
+//        leftSorter = hardwareMap.servo.get("leftSorter");
+//        rightSorter = hardwareMap.servo.get("rightSorter");
         conveyorP=0;
         floppers = 0;
         position=0.0;
@@ -52,9 +57,10 @@ gyroCompass testGyro;
     @Override
     public void loop() {
         double speed = 0.35;
-        double speed2 = 0.35;
+        double speed2 = 0.7;
         speed = speed + gamepad1.right_trigger * 0.65;
-        speed2 = speed2 + gamepad2.right_trigger * 0.65;
+        speed2 = speed2 + gamepad2.right_trigger / 1.65;
+
 
         //System.out.println(gamepad1.right_bumper);
         double frSpeed = (speed) * -(-gamepad1.left_stick_y - gamepad1.left_stick_x - gamepad1.right_stick_x);
@@ -74,7 +80,7 @@ gyroCompass testGyro;
         } else if (gamepad2.dpad_up) {
             conveyorP=-1;
         }
-        else if(gamepad2.dpad_left||gamepad2.dpad_right){
+        else {
             conveyorP=0;
         }
 
@@ -92,26 +98,30 @@ gyroCompass testGyro;
         if(gamepad2.a){
             floppers = 1;
         }
-        else if(gamepad2.b){
-            floppers=0;
-        }
         else if(gamepad2.x){
-            floppers=-1;
+            floppers= -1;
         }
+        else if (gamepad2.b) {
+            floppers=0;
+    }
         if(floppers==1){
-            intakeDrive.setPower(speed2*2);
+            intakeDrive.setPower(speed2);
         }
         else if(floppers==-1){
-            intakeDrive.setPower(-speed2*2);
+            intakeDrive.setPower(-speed2);
         }
         else{
             intakeDrive.setPower(0);
         }
 
-
-        fwopperDrive.setPower(speed2*gamepad2.left_stick_y);
-
-        position=position+(gamepad2.right_stick_y*.01);
+        if (gamepad2.left_bumper) {
+            fwopperDrive.setPower(speed2);
+        } else if (gamepad2.right_bumper) {
+            fwopperDrive.setPower(-(speed2));
+        } else {
+            fwopperDrive.setPower(0);
+        }
+        position=position+(gamepad2.right_stick_y*.1);
         if(position<0){
             position=0;
         }
@@ -123,7 +133,7 @@ gyroCompass testGyro;
         telemetry.addData("pos",position);
         telemetry.update();
         intakeBucket.setPosition(.68-(gamepad2.left_trigger*.5));
-        jewelStick.setPosition(.5+gamepad1.left_trigger);
+        jewelStick.setPosition(.1+gamepad1.left_trigger);
 
 
 
@@ -188,15 +198,16 @@ offBalance=false;
         //telemetry.addData("Level", "");
 //        dsadddddddddddddddddddddd
 
-//        double intakeSpeed = gamepad1.left_trigger-gamepad1.right_trigger;
-//        intakeDrive.setPower(intakeSpeed);
-
-        // Code using the second gamepad (for the operator/robot controller).
-//        double fwopperSpeed = gamepad2.left_stick_y;
-//        fwopperDrive.setPower(fwopperSpeed);
-//
-//        double intakeSpeed = gamepad2.right_stick_y;
-//        intakeDrive.setPower(intakeSpeed);
+//        if (gamepad1.left_bumper) {
+//            leftServo.setPosition(0);
+//            rightServo.setPosition(0);
+//        } else if (gamepad1.right_bumper) {
+//            leftServo.setPosition(90.0/191.5);
+//            rightServo.setPosition(90.0/191.5);
+//        } else {
+//            leftServo.setPosition(30.0/191.5);
+//            rightServo.setPosition(30.0/191.5);
+//        }
 
     }
 }
