@@ -22,7 +22,7 @@ import java.util.Locale;
  * Created by DeathChicken on 11/18/2017.
  */
 
-@TeleOp(name = "GyroTilt", group = "Testing")
+@TeleOp(name = "GyroTilt17", group = "Testing")
 public class GyroTilt extends OpMode
 {
     public DcMotor fl;

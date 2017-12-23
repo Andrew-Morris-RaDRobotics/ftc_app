@@ -26,15 +26,16 @@ public class turnTo {
         sumError=0;
     }
 
-    public boolean turnT(double target,double p,double i, double d,double deadZone){
+    public boolean turnT(double target1,double p,double i, double d,double deadZone){
+        double target = -target1;
         double curr = gyro.getHeading();
         double error = target-curr;
 
         if(error>180){
-            error = (360-error);
+            error = -(360-error);
         }
         if(error<-180){
-            error = -(360+error);
+            error = (360+error);
         }
 
         if(Math.abs(error)<8){
@@ -42,12 +43,13 @@ public class turnTo {
         }
 
         double power = error*p  + sumError*i + d*(error-prev);//-10 - -11
-        setP(power);
+
         prev=error;
         if(Math.abs(error)<deadZone){
             return true;
         }
         else{
+            setP(power);
             return false;
         }
 
