@@ -57,34 +57,47 @@ public class FieldDrive1 extends OpMode {
             else if(x==0&&y>0.15){
                 angle=0.0;
             }
-            if((Math.abs(x)>.08)&&(Math.abs(y)>.08)&&gamepad1.a){
+        telemetry.addData("gyro",testGyro.getHeading());
+        if(((Math.abs(x)>.08)||(Math.abs(y)>.08))&&gamepad1.a){
                 turn.turnT(angle, 0.003, 0.0005, 0.0, 1);
             }
-        if((Math.abs(x)>.08)&&(Math.abs(y)>.08)&&gamepad1.b) {
-            thing.angle(angle, 0.3);
+
+        else if(((Math.abs(x)>.08)||(Math.abs(y)>.08))&&gamepad1.b) {
+            thing.angle(angle-testGyro.getHeading(), 0.3);
+            telemetry.addData("angle",angle);
+            telemetry.addData("target angle",angle-testGyro.getHeading());
         }
-        if(gamepad1.y){
+        else if(gamepad1.y){
             thing.angle(90,0.25);
         }
-        if(gamepad1.x){
-            thing.angle(angle,0.25);
-        }
-            if(gamepad1.dpad_up){
-                turn.turnT(0, 0.001, 0.0005, 0.0, 1);
+
+          else if(gamepad1.dpad_up){
+                turn.turnT(0, 0.005, 0.0005, 0.0, 1);
             }
 
-        if(gamepad1.dpad_down){
-            turn.turnT(179.9,0.0001, 0.0005, 0.0, 1);
+       else if(gamepad1.dpad_down){
+            turn.turnT(179.9,0.005, 0.0005, 0.0, 1);
         }
 
-        if(gamepad1.dpad_right){
-            turn.turnT(90, 0.001, 0.0005, 0.0, 1);
+        else if(gamepad1.dpad_right){
+            turn.turnT(90, 0.005, 0.0005, 0.0, 1);
         }
 
-        if(gamepad1.dpad_left){
-            turn.turnT(-90, 0.001, 0.0005, 0.0, 1);
+        else if(gamepad1.dpad_left){
+            turn.turnT(-90, 0.005, 0.0005, 0.0, 1);
         }
-
+else if(gamepad1.right_bumper){
+    telemetry.addData("hi",thing.angle(-135,.2));
+}
+        else if(gamepad1.left_bumper){
+            thing.angle(45,.2);
+        }
+        else{
+            fr.setPower(0);
+            fl.setPower(0);
+            br.setPower(0);
+            bl.setPower(0);
+        }
        // angle=Math.toDegrees(Math.atan(x/y));
                // turn.turnT(-18.0, 0.0125, 0.0005, 0.0, 1);
 

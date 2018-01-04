@@ -26,8 +26,8 @@ public class turnTo {
         sumError=0;
     }
 
-    public boolean turnT(double target1,double p,double i, double d,double deadZone){
-        double target = -target1;
+    public boolean turnT(double target,double p,double i, double d,double deadZone){
+       // double target = -target1;
         double curr = gyro.getHeading();
         double error = target-curr;
 

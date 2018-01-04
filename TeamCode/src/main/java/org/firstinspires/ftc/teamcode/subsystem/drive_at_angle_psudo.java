@@ -22,13 +22,16 @@ public class drive_at_angle_psudo {
             bl = hardwareMap.dcMotor.get("bl");
             br = hardwareMap.dcMotor.get("br");
         }
-    public void angle (double angle1, double speed) {
+    public String angle (double angle1, double speed) {
 
         double rad = 3.14159*angle1/180;
         double x = Math.sin(rad);
         double y = -1*Math.cos(rad);
-        x=Math.round(1000*x)/1000;
-        y=Math.round(1000*y)/1000;
+
+
+
+       // x=Math.round(1000*x)/1000;
+       // y=Math.round(1000*y)/1000;
 //        double frSpeed = (speed) * (-Math.sin(angle1) + Math.cos(angle1));
 //        double flSpeed = (speed) * (-Math.sin(angle1) - Math.cos(angle1));
 //        double brSpeed = (speed) * (+Math.sin(angle1) + Math.cos(angle1));
@@ -37,12 +40,12 @@ public class drive_at_angle_psudo {
         double flSpeed = (speed)*(+y -x );
         double brSpeed = (speed)*(-y +x);
         double blSpeed = (speed)*(+y +x);
-        String output = "fr: " + frSpeed + "fl: " + flSpeed + "bl " +blSpeed + "br " + brSpeed;
+        String output = "x: "+ x + "y: " + y + "fr: " + frSpeed + "fl: " + flSpeed + "bl " +blSpeed + "br " + brSpeed ;
         fr.setPower(frSpeed);
         fl.setPower(flSpeed);
         br.setPower(brSpeed);
         bl.setPower(blSpeed);
-
+        return output;
     }}
 
 
