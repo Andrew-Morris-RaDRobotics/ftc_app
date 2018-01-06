@@ -36,7 +36,7 @@ public class testTurnTo extends LinearOpMode {
         while (opModeIsActive()) {
             if(!test) {
                 //test = turn.turnT(-20.0, 0.015, .00005, .00, 1);
-                test = turn.turnT(-18.0, 0.0125, 0.0005, 0.0, 1);
+               // test = turn.turnT(-18.0, 0.0125, 0.0005, 0.0, 1);
 
             }
             else{

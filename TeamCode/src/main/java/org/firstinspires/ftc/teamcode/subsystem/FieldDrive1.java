@@ -20,8 +20,13 @@ public class FieldDrive1 extends OpMode {
     drive_at_angle_psudo thing;
     ElapsedTime runtime = new ElapsedTime();
     boolean test=false;
+    double p;
+    double i;
+    double speed;
+    boolean dontDoIt;
     @Override
     public void init() {
+dontDoIt=false;
         testGyro = new gyroCompass(hardwareMap);
         turn = new turnTo(hardwareMap, testGyro);
 
@@ -30,47 +35,59 @@ public class FieldDrive1 extends OpMode {
         bl = hardwareMap.dcMotor.get("bl");
         br = hardwareMap.dcMotor.get("br");
         thing = new drive_at_angle_psudo(hardwareMap);
+        p=.0016;
+        i=.0002;
+        speed=0.3;
     }
 
     public void loop(){
-
+        speed=0.22;
+        speed += gamepad1.right_trigger*.78;
+dontDoIt=false;
                 //test = turn.turnT(-20.0, 0.015, .00005, .00, 1);
 
-            double angle = 0;
-            double x = gamepad1.right_stick_x;
-            double y = -1*gamepad1.right_stick_y;
-            if(x>0&&y>0){
-                angle=Math.toDegrees(Math.atan(x/y));
-            }
-            else if(x>0&&y<=0){
-                angle=90+-1*Math.toDegrees(Math.atan(y/x));
-            }
-           else if(x<0&&y<=0){
-                angle=-90+-1*Math.toDegrees(Math.atan(y/x));
-            }
-            else if(x<0&&y>0){
-                angle=Math.toDegrees(Math.atan(x/y));
-            }
-            else if(x==0&&y<0.15){
-                angle=180.0;
-            }
-            else if(x==0&&y>0.15){
-                angle=0.0;
-            }
+
+
+        double angle2 = 0;
+        double x2 = gamepad1.left_stick_x;
+        double y2 = -1*gamepad1.left_stick_y;
+        if(x2>0&&y2>0){
+            angle2=Math.toDegrees(Math.atan(x2/y2));
+        }
+        else if(x2>0&&y2<=0){
+            angle2=90+-1*Math.toDegrees(Math.atan(y2/x2));
+        }
+        else if(x2<0&&y2<=0){
+            angle2=-90+-1*Math.toDegrees(Math.atan(y2/x2));
+        }
+        else if(x2<0&&y2>0){
+            angle2=Math.toDegrees(Math.atan(x2/y2));
+        }
+        else if(x2==0&&y2<0.15){
+            angle2=180.0;
+        }
+        else if(x2==0&&y2>0.15){
+            angle2=0.0;
+        }
+
         telemetry.addData("gyro",testGyro.getHeading());
-        if(((Math.abs(x)>.08)||(Math.abs(y)>.08))&&gamepad1.a){
-                turn.turnT(angle, 0.003, 0.0005, 0.0, 1);
-            }
+//        if(((Math.abs(x)>.08)||(Math.abs(y)>.08))){
+//                turn.turnT(angle, p, i, 0.0, 1);
+//            dontDoIt=true;
+//            }
 
-        else if(((Math.abs(x)>.08)||(Math.abs(y)>.08))&&gamepad1.b) {
-            thing.angle(angle-testGyro.getHeading(), 0.3);
-            telemetry.addData("angle",angle);
-            telemetry.addData("target angle",angle-testGyro.getHeading());
-        }
-        else if(gamepad1.y){
-            thing.angle(90,0.25);
+         if(((Math.abs(x2)>.08)||(Math.abs(y2)>.08))) {
+            thing.angle(angle2-(-1*testGyro.getHeading()), speed,-1*gamepad1.right_stick_x*(speed+.03));
+            telemetry.addData("angle",angle2);
+            telemetry.addData("target angle",angle2-(-1*testGyro.getHeading()));
         }
 
+        else if(Math.abs(gamepad1.right_stick_x)>.05){
+             fr.setPower(-1*gamepad1.right_stick_x*speed);
+             fl.setPower(-1*gamepad1.right_stick_x*speed);
+             br.setPower(-1*gamepad1.right_stick_x*speed);
+             bl.setPower(-1*gamepad1.right_stick_x*speed);
+         }
           else if(gamepad1.dpad_up){
                 turn.turnT(0, 0.005, 0.0005, 0.0, 1);
             }
@@ -86,13 +103,9 @@ public class FieldDrive1 extends OpMode {
         else if(gamepad1.dpad_left){
             turn.turnT(-90, 0.005, 0.0005, 0.0, 1);
         }
-else if(gamepad1.right_bumper){
-    telemetry.addData("hi",thing.angle(-135,.2));
-}
-        else if(gamepad1.left_bumper){
-            thing.angle(45,.2);
-        }
-        else{
+
+
+        else if(!dontDoIt){
             fr.setPower(0);
             fl.setPower(0);
             br.setPower(0);
@@ -104,7 +117,7 @@ else if(gamepad1.right_bumper){
 
 
 
-            telemetry.addData("angle: ",angle);
+            telemetry.addData("angle: ",angle2);
            // telemetry.addData("gyro ",testGyro.getHeading());
             telemetry.update();
             //turn.turnT(10.0,1/40,1/1000,1);

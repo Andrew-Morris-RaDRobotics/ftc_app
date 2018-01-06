@@ -35,7 +35,7 @@ public class testTurnTo0o extends LinearOpMode {
         thing = new drive_at_angle_psudo(hardwareMap);
         //testGyro.angle(10.0,0.3);
         while (opModeIsActive()) {
-            thing.angle(90.0,0.3);
+            //thing.angle(90.0,0.3);
             //turn.turnT(10.0,1/40,1/1000,1);
         }
 
