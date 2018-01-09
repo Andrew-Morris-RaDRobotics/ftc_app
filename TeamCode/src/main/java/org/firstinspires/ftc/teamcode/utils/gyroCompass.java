@@ -17,14 +17,15 @@ import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
  */
 
 public class gyroCompass {
-    private final BNO055IMU imu;
+    private BNO055IMU imu;
 
     // State used for updating telemetry
     private Orientation angles;
+    private HardwareMap ThishardwareMap;
    // private final Acceleration gravity;
 
     public gyroCompass(HardwareMap hardwareMap) {
-
+        ThishardwareMap=hardwareMap;
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
@@ -45,7 +46,21 @@ public class gyroCompass {
         angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
     }
+    public void reset(){
 
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
+        parameters.loggingEnabled = true;
+        parameters.loggingTag = "IMU";
+        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+
+        imu = ThishardwareMap.get(BNO055IMU.class, "imu");
+        imu.initialize(parameters);
+
+        angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+    }
     public double getHeading(){
         angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         return AngleUnit.DEGREES.fromUnit(angles.angleUnit, angles.firstAngle);

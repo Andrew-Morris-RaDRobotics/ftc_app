@@ -4,8 +4,9 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.subsystem.drive_at_angle_psudo;
+import org.firstinspires.ftc.teamcode.utils.drive_at_angle_psudo;
 import org.firstinspires.ftc.teamcode.utils.gyroCompass;
+import org.firstinspires.ftc.teamcode.utils.turnTo;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "TeleOp", group = "ChallengeFile")
 public class TeleOp extends OpMode {
@@ -23,6 +24,7 @@ public class TeleOp extends OpMode {
     DcMotor conveyor;
     gyroCompass testGyro;
     drive_at_angle_psudo thing;
+    public turnTo turn;
 
     Servo intakeBucket;
     Servo jewelStick;
@@ -34,7 +36,7 @@ public class TeleOp extends OpMode {
     double angle2 = 0;
     boolean tankdrive = false;
     boolean startPressed = false;
-
+    boolean gyroReset = false;
     //    Servo leftSorter;
 //    Servo rightSorter;
     @Override
@@ -62,10 +64,19 @@ public class TeleOp extends OpMode {
         testGyro = new gyroCompass(hardwareMap);
         balanceEnabled = true;
         thing= new drive_at_angle_psudo(hardwareMap);
+        turn = new turnTo(hardwareMap, testGyro);
     }
 
     @Override
     public void loop() {
+
+        if(gamepad1.start && !gyroReset){
+            gyroReset=true;
+            testGyro.reset();
+        }
+        else if(!gamepad1.start){
+            gyroReset=false;
+        }
         boolean Driving = false;
         if(Math.abs(gamepad1.left_stick_x)>.03 ||Math.abs(gamepad1.left_stick_y)>.03 || Math.abs(gamepad1.right_stick_x)>.03){
             Driving=true;
@@ -139,6 +150,20 @@ public class TeleOp extends OpMode {
             fl.setPower(flSpeed);
             br.setPower(brSpeed);
             bl.setPower(blSpeed);
+        } else if(gamepad1.dpad_up){
+            turn.turnT(0, 0.005, 0.0005, 0.0, 1);
+        }
+
+        else if(gamepad1.dpad_down){
+            turn.turnT(179.9,0.005, 0.0005, 0.0, 1);
+        }
+
+        else if(gamepad1.dpad_right){
+            turn.turnT(90, 0.005, 0.0005, 0.0, 1);
+        }
+
+        else if(gamepad1.dpad_left){
+            turn.turnT(-90, 0.005, 0.0005, 0.0, 1);
         }
         else if(!Driving && balanceEnabled){
 
@@ -182,6 +207,7 @@ public class TeleOp extends OpMode {
         }
 
         //other stuff thats not drive
+
         if (gamepad2.dpad_down) {
             conveyorP = 1;
         } else if (gamepad2.dpad_up) {
@@ -231,10 +257,11 @@ public class TeleOp extends OpMode {
         }
         leftIntakeFlipper.setPosition(position);
         rightIntakeFlipper.setPosition(position);
+
         telemetry.addData("pos", position);
         telemetry.update();
         intakeBucket.setPosition(.68 - (gamepad2.left_trigger * .5));
-        jewelStick.setPosition(.1 + gamepad1.left_trigger);
+        //jewelStick.setPosition(.1 + gamepad1.left_trigger);
 
        // double pitch = testGyro.getPitch();
        // double roll = -1 * (testGyro.getRoll());
