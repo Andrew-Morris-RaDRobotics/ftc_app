@@ -7,8 +7,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.subsystem.drive_at_angle_psudo;
 import org.firstinspires.ftc.teamcode.utils.gyroCompass;
 
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "TeleOp", group = "ChallengeFile")
-public class TeleOp extends OpMode {
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "TeleOpFieldDriveAutobalance", group = "ChallengeFile")
+public class TeleOpFieldDriveAutobalance extends OpMode {
 
     public DcMotor stanley;
 
@@ -61,41 +61,34 @@ public class TeleOp extends OpMode {
         position = 0.0;
         testGyro = new gyroCompass(hardwareMap);
         balanceEnabled = true;
-        thing= new drive_at_angle_psudo(hardwareMap);
     }
 
     @Override
     public void loop() {
-        boolean Driving = false;
-        if(Math.abs(gamepad1.left_stick_x)>.03 ||Math.abs(gamepad1.left_stick_y)>.03 || Math.abs(gamepad1.right_stick_x)>.03){
-            Driving=true;
-        }
         double speed = 0.35;
         double speed2 = 0.7;
         speed = speed + gamepad1.right_trigger * 0.65;
         speed2 = speed2 + gamepad2.right_trigger / 1.65;
 
-        if (gamepad1.y && startPressed == false) {
+        if (gamepad1.start && startPressed == false) {
             startPressed = true;
-            tankdrive=!tankdrive;
-        } else if (!gamepad1.y) {
+        } else if (!gamepad1.start) {
             startPressed = false;
         }
 
-
+        if (startPressed = true) {
+            if (tankdrive) {
+                tankdrive = false;
+            } else if (tankdrive = false) {
+                tankdrive = true;
+            }
+        }
 
         telemetry.addData("Tankdrive",tankdrive);
-        telemetry.addData("balanceEnabled",balanceEnabled);
-        if(gamepad1.a){
-            balanceEnabled=true;
 
-        }
-        if(gamepad1.b){
-            balanceEnabled=false;
-        }
 
         //System.out.println(gamepad1.right_bumper);
-        if (!tankdrive && Driving) {
+        if (tankdrive == false) {
             double x2 = gamepad1.left_stick_x;
             double y2 = -1 * gamepad1.left_stick_y;
             if (x2 > 0 && y2 > 0) {
@@ -111,77 +104,38 @@ public class TeleOp extends OpMode {
             } else if (x2 == 0 && y2 > 0.15) {
                 angle2 = 0.0;
             }
-            double magnitude = Math.sqrt(Math.pow(x2,2)+Math.pow(y2,2));
+
             telemetry.addData("gyro", testGyro.getHeading());
 //        if(((Math.abs(x)>.08)||(Math.abs(y)>.08))){
 //                turn.turnT(angle, p, i, 0.0, 1);
 //            dontDoIt=true;
 //            }
 
-            if (((Math.abs(x2) > .08) || (Math.abs(y2) > .08))) {
-                thing.angle(angle2 - (-1 * testGyro.getHeading()), magnitude*speed, -1 * gamepad1.right_stick_x * (speed + .03));
+            if (((Math.abs(x2) > .08) || (Math.abs(y2) > .08)) &&offBalance&&balanceEnabled) {
+                thing.angle(angle2 - (-1 * testGyro.getHeading()), speed, -1 * gamepad1.right_stick_x * (speed + .03));
                 telemetry.addData("angle", angle2);
                 telemetry.addData("target angle", angle2 - (-1 * testGyro.getHeading()));
-            } else if (Math.abs(gamepad1.right_stick_x) > .05) {
+            } else if (Math.abs(gamepad1.right_stick_x) > .05 && offBalance&&balanceEnabled) {
                 fr.setPower(-1 * gamepad1.right_stick_x * speed);
                 fl.setPower(-1 * gamepad1.right_stick_x * speed);
                 br.setPower(-1 * gamepad1.right_stick_x * speed);
                 bl.setPower(-1 * gamepad1.right_stick_x * speed);
             }
-        }
-        else if(tankdrive && Driving){
+        } else {
             double frSpeed = (speed) * -(-gamepad1.left_stick_y - gamepad1.left_stick_x - gamepad1.right_stick_x);
             double flSpeed = (speed) * -(+gamepad1.left_stick_y - gamepad1.left_stick_x - gamepad1.right_stick_x);
             double brSpeed = (speed) * -(-gamepad1.left_stick_y + gamepad1.left_stick_x - gamepad1.right_stick_x);
             double blSpeed = (speed) * -(+gamepad1.left_stick_y + gamepad1.left_stick_x - gamepad1.right_stick_x);
-            //if(offBalance&&balanceEnabled) {
+            if(offBalance&&balanceEnabled) {
             fr.setPower(frSpeed);
             fl.setPower(flSpeed);
             br.setPower(brSpeed);
             bl.setPower(blSpeed);
         }
-        else if(!Driving && balanceEnabled){
-
-            double pitch = testGyro.getPitch();
-            double roll = -1 * (testGyro.getRoll());
-
-            double asdf = testGyro.getHeading();
-            telemetry.addData("roll", roll);
-            telemetry.addData("pitch", pitch);
-            telemetry.addData("heading", asdf);
-
-            if ( (roll > 2) || (roll < -2) || (pitch > 2) || (pitch < -2) ) {
-
-                if(roll<2 && roll>-2){
-                    roll = 0;
-                }
-                if(pitch<2 && pitch>-2){
-                    pitch = 0;
-                }
-
-                fr.setPower(-(.032) * (-roll + pitch));
-                fl.setPower(-(.032) * (+roll + pitch));
-                br.setPower(-(.032) * (-roll - pitch));
-                bl.setPower(-(.032) * (+roll - pitch));
-                telemetry.addData("balancing",".");
-            }
-            else {
-                fr.setPower(0);
-                fl.setPower(0);
-                br.setPower(0);
-                bl.setPower(0);
-                telemetry.addData("Level", "");
-                offBalance=false;
-            }
         }
-        else if(!Driving){
-            fr.setPower(0);
-            fl.setPower(0);
-            br.setPower(0);
-            bl.setPower(0);
-        }
+        // }
 
-        //other stuff thats not drive
+//conveyor
         if (gamepad2.dpad_down) {
             conveyorP = 1;
         } else if (gamepad2.dpad_up) {
@@ -199,7 +153,6 @@ public class TeleOp extends OpMode {
         }
 
         //floppers
-
         if (gamepad2.a) {
             floppers = 1;
         } else if (gamepad2.x) {
@@ -236,8 +189,56 @@ public class TeleOp extends OpMode {
         intakeBucket.setPosition(.68 - (gamepad2.left_trigger * .5));
         jewelStick.setPosition(.1 + gamepad1.left_trigger);
 
-       // double pitch = testGyro.getPitch();
-       // double roll = -1 * (testGyro.getRoll());
+        if(gamepad1.a){
+            balanceEnabled=true;
+        }
+        if(gamepad1.b){
+            balanceEnabled=false;
+        }
+
+        double pitch = testGyro.getPitch();
+        double roll = -1 * (testGyro.getRoll());
+       // switched them because im lazy
+         double asdf = testGyro.getHeading();
+        telemetry.addData("roll", roll);
+         telemetry.addData("pitch", pitch);
+         telemetry.addData("heading", asdf);
+        // telemetry.addData("test: ", xp);
+         //xp++;
+          telemetry.update();
+
+        if ( (roll > 2) || (roll < -2) || (pitch > 2) || (pitch < -2) ) {
+            offBalance=true;
+
+            if(roll<3 && roll>-3){
+                roll = 0;
+            }
+            if(pitch<3 && pitch>-3){
+                pitch = 0;
+            }
+
+
+            if(balanceEnabled) {
+                fr.setPower(-(.032) * (-roll + pitch));
+                fl.setPower(-(.032) * (+roll + pitch));
+                br.setPower(-(.032) * (-roll - pitch));
+                bl.setPower(-(.032) * (+roll - pitch));
+            }
+
+
+        }
+        else {
+            telemetry.addData("Level", "");
+offBalance=false;
+
+        }
+
+
+
+
+
+
+
 
     }
 }

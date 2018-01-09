@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.utils.gyroCompass;
 import org.firstinspires.ftc.teamcode.utils.motorDeclaration;
 import org.firstinspires.ftc.teamcode.utils.turnTo;
 
-@Autonomous (name= "RedJewel", group= "competition")
+@Autonomous (name= "RedJewelRight", group= "competition")
 
 public class RedJewelRight extends LinearOpMode {
 

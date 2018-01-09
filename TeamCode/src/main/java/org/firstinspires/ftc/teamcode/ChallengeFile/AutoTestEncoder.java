@@ -12,9 +12,9 @@ import org.firstinspires.ftc.teamcode.utils.gyroCompass;
 import org.firstinspires.ftc.teamcode.utils.motorDeclaration;
 import org.firstinspires.ftc.teamcode.utils.turnTo;
 
-@Autonomous (name= "BlueJewelLeft", group= "competition")
+@Autonomous (name= "AutotestEncoder", group= "competition")
 
-public class BlueJewelLeft extends LinearOpMode {
+public class AutoTestEncoder extends LinearOpMode {
 
     public Servo jewelStick;
     public ColorSensor leftJewel;
@@ -139,6 +139,11 @@ public class BlueJewelLeft extends LinearOpMode {
                         bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                         fr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                         bl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+                        fr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                        fl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                        br.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                        bl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                         completed++;
                     }
                     telemetry.addData("comp:", completed);
@@ -167,19 +172,30 @@ public class BlueJewelLeft extends LinearOpMode {
 //            }
 //
             if (completed == 1) {
-                telemetry.addData("Path0", "Starting at %7d :%7d",
-                        fr.getCurrentPosition(),
-                        bl.getCurrentPosition());
-                if(fr.getCurrentPosition()<500) {
-                    Motors.setP(0, 0.3, 0);
-                }
+//                telemetry.addData("Path0", "Starting at %7d :%7d",
+//                        fr.getCurrentPosition(),
+//                        bl.getCurrentPosition());
+//                if(fr.getCurrentPosition()<500) {
+//                    Motors.setP(0, 0.3, 0);
+//                }
+
 //                if (fr.getCurrentPosition()<1000) {
 //                    Motors.setP(0.3,0,0);
 //                }
-                else {
-                    Motors.setP(0, 0, 0);
+                fr.setTargetPosition(-500);
+                fr.setPower(0.3);
+
+                fl.setTargetPosition(500);
+                fl.setPower(0.3);
+
+                br.setTargetPosition(500);
+                br.setPower(0.3);
+
+                bl.setTargetPosition(-500);
+                bl.setPower(0.3);
+                   // Motors.setP(0, 0, 0);
                     telemetry.addData("done!","ye");
-                }
+
 
             }
 
