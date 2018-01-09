@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.testing;
+package org.firstinspires.ftc.teamcode.utils;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -16,8 +16,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import java.util.Locale;
 
 
-@TeleOp(name = "AutobalanceTest", group = "Testing")
-public class AutobalanceTest extends LinearOpMode {
+@TeleOp(name = "Autobalance", group = "testing")
+public class Autobalance extends LinearOpMode {
 
     BNO055IMU imu;
 

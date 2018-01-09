@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.testing;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -23,7 +23,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.teamcode.utils.motorDeclaration;
 
 
-@Autonomous(name = "VuforiaAlignment", group = "Testing")
+@Autonomous(name = "VuforiaAlignment2", group = "Testing")
 
 public class VuforiaAlignmentTest extends LinearOpMode {
 

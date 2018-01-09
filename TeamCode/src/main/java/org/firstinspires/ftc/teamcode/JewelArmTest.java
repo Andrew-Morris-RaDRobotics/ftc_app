@@ -51,11 +51,12 @@ public class JewelArmTest extends LinearOpMode {
         jewelStick = hardwareMap.servo.get("jewelStick");
         leftJewel = hardwareMap.colorSensor.get("leftJewel");
         rightJewel = hardwareMap.colorSensor.get("rightJewel");
-
-
+        int newLeftTarget = 0;
+        int newRightTarget = 0;
+        double target = 0;
         waitForStart();
 
-        jewelStick.setPosition(0.4);
+        jewelStick.setPosition(1);
         int completed =  0;
         int color = 0; //1 is red 2 is blu (left side)
         double curr = 0.0;
@@ -75,11 +76,13 @@ public class JewelArmTest extends LinearOpMode {
                     telemetry.addData("left side is red", "right side is blue");
                     color = 1;
                     curr = testGyro.getHeading();
+                    target = curr+10;
                     sleep(1000);
                 } else if (leftJewel.red() + 1 < rightJewel.red() && rightJewel.blue() + 1 < leftJewel.blue()) {
                     telemetry.addData("right side is red", "left side is blue");
                     color = 2;
                     curr = testGyro.getHeading();
+                    target = curr-10;
                     sleep(1000);
 
                 } else {
@@ -88,43 +91,54 @@ public class JewelArmTest extends LinearOpMode {
 
             }
             if(color==1) {
-                double target = curr+10;
+
+                telemetry.addData("gyroC1",testGyro.getHeading());
+                telemetry.addData("target",target);
+                telemetry.addData("stage",stage);
+                telemetry.update();
+
                // if(testGyro.getHeading()<target && stage==0) {
-                if(stage<2){
-                    Motors.setP(0, 0, -(target-testGyro.getHeading())/50);
+                if(stage<1){
+                    Motors.setP(0, 0, (target-testGyro.getHeading())/50);
                }
                 if(testGyro.getHeading()>=target && stage==0){
                     target=curr;
                     jewelStick.setPosition(0);
                     stage++;
                 }
-                if(stage==1 && testGyro.getHeading()<=target+.5){
+                if(stage==1 && testGyro.getHeading()<=target+1 && testGyro.getHeading()>=target-1){
                     stage++;
                     Motors.setP(0,0,0);
+                    sleep(1000);
+                   // completed++;
                 }
 
             }
             if(color==2){
-                double target = curr-10;
+                telemetry.addData("gyroC2 ",testGyro.getHeading());
+                telemetry.addData("target",target);
+                telemetry.addData("stage",stage);
+                telemetry.update();
                 //if(testGyro.getHeading()<target && stage==0) {
-                if(stage<2) {
-                    Motors.setP(0, 0, -(target - testGyro.getHeading()) / 50);
+                if(stage<1) {
+                    Motors.setP(0, 0, (target - testGyro.getHeading()) / 50);
                 } //}
                 if(testGyro.getHeading()<target && stage==0){
                     target=curr;
                     jewelStick.setPosition(0);
                     stage++;
                 }
-                if(stage==1 && testGyro.getHeading()>target-.5){
+                if(stage==1 && testGyro.getHeading()>=target-1&& testGyro.getHeading()<=target+1){
                     stage++;
                     Motors.setP(0,0,0);
+                    sleep(1000);
+                   // completed++;
                 }
 
             }
 
         if(completed==2) {
-            int newLeftTarget = fr.getCurrentPosition() + (int) (12 * COUNTS_PER_INCH);
-            int newRightTarget = fr.getCurrentPosition() + (int) (12 * COUNTS_PER_INCH);
+
             fr.setTargetPosition(newLeftTarget);
             bl.setTargetPosition(newRightTarget);
             fr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -149,6 +163,8 @@ public class JewelArmTest extends LinearOpMode {
             bl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             fr.setPower(0);
             bl.setPower(0);
+             newLeftTarget = fr.getCurrentPosition() + (int) (12 * COUNTS_PER_INCH);
+            newRightTarget = fr.getCurrentPosition() + (int) (12 * COUNTS_PER_INCH);
             completed++;
             telemetry.addData("Completed1",completed);
             telemetry.update();
