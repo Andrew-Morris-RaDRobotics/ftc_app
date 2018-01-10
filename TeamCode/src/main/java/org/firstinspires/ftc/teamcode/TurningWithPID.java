@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.utils.gyroCompass;
 
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "turningWithPID", group = "testing")
+//@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "turningWithPID", group = "testing")
 public class TurningWithPID extends OpMode {
 
     public DcMotor stanley;

@@ -37,6 +37,7 @@ public class TeleOp extends OpMode {
     boolean tankdrive = false;
     boolean startPressed = false;
     boolean gyroReset = false;
+    boolean Driving;
     //    Servo leftSorter;
 //    Servo rightSorter;
     @Override
@@ -77,9 +78,15 @@ public class TeleOp extends OpMode {
         else if(!gamepad1.start){
             gyroReset=false;
         }
-        boolean Driving = false;
-        if(Math.abs(gamepad1.left_stick_x)>.03 ||Math.abs(gamepad1.left_stick_y)>.03 || Math.abs(gamepad1.right_stick_x)>.03){
+telemetry.addData("x",gamepad1.left_stick_x);
+        telemetry.addData("y",gamepad1.left_stick_y);
+        telemetry.addData("x2",gamepad1.right_stick_x);
+        if((Math.abs(gamepad1.left_stick_x)>.05) ||(Math.abs(gamepad1.left_stick_y)>.05) || (Math.abs(gamepad1.right_stick_x)>.05) ){
             Driving=true;
+            turn.reset();
+        }
+        else{
+            Driving=false;
         }
         double speed = 0.35;
         double speed2 = 0.7;
@@ -97,6 +104,7 @@ public class TeleOp extends OpMode {
 
         telemetry.addData("Tankdrive",tankdrive);
         telemetry.addData("balanceEnabled",balanceEnabled);
+        telemetry.addData("drivin",Driving );
         if(gamepad1.a){
             balanceEnabled=true;
 
@@ -141,32 +149,32 @@ public class TeleOp extends OpMode {
             }
         }
         else if(tankdrive && Driving){
-            double frSpeed = (speed) * -(-gamepad1.left_stick_y - gamepad1.left_stick_x - gamepad1.right_stick_x);
-            double flSpeed = (speed) * -(+gamepad1.left_stick_y - gamepad1.left_stick_x - gamepad1.right_stick_x);
-            double brSpeed = (speed) * -(-gamepad1.left_stick_y + gamepad1.left_stick_x - gamepad1.right_stick_x);
-            double blSpeed = (speed) * -(+gamepad1.left_stick_y + gamepad1.left_stick_x - gamepad1.right_stick_x);
+            double frSpeed = (speed) * (-gamepad1.left_stick_y - gamepad1.left_stick_x - gamepad1.right_stick_x);
+            double flSpeed = (speed) * (+gamepad1.left_stick_y - gamepad1.left_stick_x - gamepad1.right_stick_x);
+            double brSpeed = (speed) * (-gamepad1.left_stick_y + gamepad1.left_stick_x - gamepad1.right_stick_x);
+            double blSpeed = (speed) * (+gamepad1.left_stick_y + gamepad1.left_stick_x - gamepad1.right_stick_x);
             //if(offBalance&&balanceEnabled) {
             fr.setPower(frSpeed);
             fl.setPower(flSpeed);
             br.setPower(brSpeed);
             bl.setPower(blSpeed);
         } else if(gamepad1.dpad_up){
-            turn.turnT(0, 0.005, 0.0005, 0.0, 1);
+           telemetry.addData("i", turn.turnT(0, 0.004, 0.001, 0.0, 1));
         }
 
         else if(gamepad1.dpad_down){
-            turn.turnT(179.9,0.005, 0.0005, 0.0, 1);
+            telemetry.addData("i", turn.turnT(179.9,0.004, 0.001, 0.0, 1));
         }
 
         else if(gamepad1.dpad_right){
-            turn.turnT(90, 0.005, 0.0005, 0.0, 1);
+            telemetry.addData("i",  turn.turnT(-90, 0.004, 0.001, 0.0, 1));
         }
 
         else if(gamepad1.dpad_left){
-            turn.turnT(-90, 0.005, 0.0005, 0.0, 1);
+            telemetry.addData("i", turn.turnT(90, 0.004, 0.001, 0.0, 1));
         }
         else if(!Driving && balanceEnabled){
-
+turn.reset();
             double pitch = testGyro.getPitch();
             double roll = -1 * (testGyro.getRoll());
 
@@ -200,6 +208,7 @@ public class TeleOp extends OpMode {
             }
         }
         else if(!Driving){
+            turn.reset();
             fr.setPower(0);
             fl.setPower(0);
             br.setPower(0);

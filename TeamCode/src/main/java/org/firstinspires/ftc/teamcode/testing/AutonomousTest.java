@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.utils.GlyphVision;
 
-@Autonomous(name="AutonomousTest")
+//@Autonomous(name="AutonomousTest")
 
 public class AutonomousTest extends OpMode{
 

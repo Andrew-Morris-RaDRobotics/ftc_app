@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.utils.gyroCompass;
 /**
  * Created by Andrew on 12/9/2017.
  */
-@TeleOp (name = "TeleOpGyro", group = "ChallengeFile")
+//@TeleOp (name = "TeleOpGyro", group = "ChallengeFile")
 public class TeleOpWithGyro extends OpMode {
 
     public DcMotor stanley;

@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
+import org.firstinspires.ftc.teamcode.utils.GlyphVision;
 import org.firstinspires.ftc.teamcode.utils.gyroCompass;
 import org.firstinspires.ftc.teamcode.utils.motorDeclaration;
 import org.firstinspires.ftc.teamcode.utils.turnTo;
@@ -27,10 +29,11 @@ public class AutoTestEncoder extends LinearOpMode {
     public gyroCompass testGyro;
     ElapsedTime runtime = new ElapsedTime();
     public turnTo turn;
+    public GlyphVision glyph;
 
     @Override
     public void runOpMode() throws InterruptedException {
-
+    glyph= new GlyphVision(hardwareMap);
         testGyro = new gyroCompass(hardwareMap);
         turn = new turnTo(hardwareMap, testGyro);
         Motors = new motorDeclaration(hardwareMap);
@@ -72,8 +75,21 @@ public class AutoTestEncoder extends LinearOpMode {
         double i = .0003;
         int updatin = 0;
         int Timer = 0;
+        RelicRecoveryVuMark matchGlyph = null;
         while (opModeIsActive()) {
-            if (completed == 0) {
+
+            if(completed==0){
+
+              matchGlyph= glyph.getGlyph();
+
+                if(matchGlyph!=null){
+                    completed++;
+                }
+            }
+            telemetry.addData("glyph: ",matchGlyph);
+            telemetry.addData("Completedvar", completed);
+
+            if (completed == 1) {
                 if (color == 0) {
 
 
@@ -81,19 +97,19 @@ public class AutoTestEncoder extends LinearOpMode {
                         telemetry.addData("left side is red", "right side is blue");
                         color = 2;
                         curr = testGyro.getHeading();
-                        target = curr - 10;
+                        target = curr - 15;
                         // sleep(1000);
                     } else if (leftJewel.red() + 1 < rightJewel.red() && rightJewel.blue() + 1 < leftJewel.blue()) {
                         telemetry.addData("right side is red", "left side is blue");
                         color = 1;
                         curr = testGyro.getHeading();
-                        target = curr + 10;
+                        target = curr + 15;
                         //sleep(1000);
 
                     } else {
                         telemetry.addData("No reading", "");
                     }
-                    telemetry.addData("Completedvar", completed);
+
                     telemetry.addData("Left Red", leftJewel.red());
                     telemetry.addData("Left Blue", leftJewel.blue());
                     telemetry.addData("Right Red", rightJewel.red());
@@ -116,7 +132,7 @@ public class AutoTestEncoder extends LinearOpMode {
                     if (stage == 0) {
                         //Motors.setP(0, 0, target/50);
                         telemetry.addData("turning to", target);
-                        isComplete = turn.turnT(target, 0.005, 0.0005, 0.0, 1);
+                        isComplete = turn.turnT(target, 0.008, 0.0005, 0.0, 1);
                         //isComplete = turn.turnT(target, p, 0, 0.0, 1);
                     }
                     if (isComplete == 0.0) {
@@ -151,27 +167,9 @@ public class AutoTestEncoder extends LinearOpMode {
             }
 //
 //
-//            if (completed == 2) {
 //
-//                fr.setTargetPosition(newLeftTarget);
-//                bl.setTargetPosition(newRightTarget);
-//                fr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                bl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                telemetry.addData("Path1", "Running to %7d :%7d", newLeftTarget, newRightTarget);
-//                telemetry.addData("Path2", "Running at %7d :%7d",
-//                        fr.getCurrentPosition(),
-//                        bl.getCurrentPosition());
-//                telemetry.update();
-//                fr.setPower(Math.abs(.3));
-//                bl.setPower(Math.abs(.3));
-//                if (completed == 0 && newLeftTarget >= fr.getCurrentPosition() - 4 && newLeftTarget <= fr.getCurrentPosition() + 4 && newRightTarget >= bl.getCurrentPosition() - 4 && newRightTarget <= bl.getCurrentPosition() + 4) {
-//                    completed++;
-//                    telemetry.addData("Completed1", "");
-//                    telemetry.update();
-//                }
-//            }
 //
-            if (completed == 1) {
+            if (completed == 2) {
 //                telemetry.addData("Path0", "Starting at %7d :%7d",
 //                        fr.getCurrentPosition(),
 //                        bl.getCurrentPosition());
@@ -193,7 +191,7 @@ public class AutoTestEncoder extends LinearOpMode {
 
                 bl.setTargetPosition(-500);
                 bl.setPower(0.3);
-                   // Motors.setP(0, 0, 0);
+
                     telemetry.addData("done!","ye");
 
 

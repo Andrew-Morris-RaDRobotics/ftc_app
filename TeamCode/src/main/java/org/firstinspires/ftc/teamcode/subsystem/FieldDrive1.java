@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.utils.gyroCompass;
 import org.firstinspires.ftc.teamcode.utils.turnTo;
-import org.firstinspires.ftc.teamcode.subsystem.drive_at_angle_psudo;
+import org.firstinspires.ftc.teamcode.utils.drive_at_angle_psudo;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "FieldDrive1", group = "testing")
 
