@@ -159,19 +159,19 @@ telemetry.addData("x",gamepad1.left_stick_x);
             br.setPower(brSpeed);
             bl.setPower(blSpeed);
         } else if(gamepad1.dpad_up){
-           telemetry.addData("i", turn.turnT(0, 0.004, 0.001, 0.0, 1));
+           telemetry.addData("i", turn.turnT(0, 0.0035, 0.0003, 0.0, 1));
         }
 
         else if(gamepad1.dpad_down){
-            telemetry.addData("i", turn.turnT(179.9,0.004, 0.001, 0.0, 1));
+            telemetry.addData("i", turn.turnT(179.9,0.0035, 0.0003, 0.0, 1));
         }
 
         else if(gamepad1.dpad_right){
-            telemetry.addData("i",  turn.turnT(-90, 0.004, 0.001, 0.0, 1));
+            telemetry.addData("i",  turn.turnT(-90, 0.0035, 0.0003, 0.0, 1));
         }
 
         else if(gamepad1.dpad_left){
-            telemetry.addData("i", turn.turnT(90, 0.004, 0.001, 0.0, 1));
+            telemetry.addData("i", turn.turnT(90, 0.0035, 0.0003, 0.0, 1));
         }
         else if(!Driving && balanceEnabled){
 turn.reset();
@@ -234,21 +234,15 @@ turn.reset();
         }
 
         //floppers
-
-//        if (gamepad2.a) {
-//            floppers = 1;
-//        } else if (gamepad2.x) {
-//            floppers = -1;
-//        } else if (gamepad2.b) {
-//            floppers = 0;
-//        }
-//        if (floppers == 1) {
-//            intakeDrive.setPower(speed2);
-//        } else if (floppers == -1) {
-//            intakeDrive.setPower(-speed2);
-//        } else {
-//            intakeDrive.setPower(0);
-//        }
+        double intake = speed2 * -gamepad2.left_stick_y;
+        double inverseIntake = speed2 * gamepad2.left_stick_y;
+        if (gamepad2.a) {
+            intakeDrive.setPower(intake);
+        } else if (gamepad2.x) {
+            intakeDrive.setPower(inverseIntake);
+        } else {
+            intakeDrive.setPower(0);
+        }
         intakeDrive.setPower(gamepad2.left_stick_y*speed2);
 
         if (gamepad2.left_bumper) {

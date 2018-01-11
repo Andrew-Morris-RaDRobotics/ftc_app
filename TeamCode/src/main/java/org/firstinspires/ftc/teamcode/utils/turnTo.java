@@ -20,6 +20,7 @@ public class turnTo {
     private gyroCompass gyro;
     private double sumError;
     private double prev;
+    private boolean prevPosError;
     public turnTo(HardwareMap hardwareMap, gyroCompass gyroscope) {
         history = new ArrayList<Double>();
         fr = hardwareMap.dcMotor.get("fr");
@@ -36,7 +37,7 @@ public class turnTo {
         double curr = gyro.getHeading();
         double error = target-curr;
         history.add(error);
-        if(history.size()>5){
+        if(history.size()>8){
             history.remove(0);
         }
 
@@ -48,13 +49,27 @@ public class turnTo {
         }
 
 
-        sumError+=error;
+        //sumError+=error;
 
         double end = history.get(history.size()-1);
         double beginning = history.get(0);
         double diff = beginning-end;
         double power = error*p;
-        if(Math.abs(diff)<5){
+
+        boolean PosError = true;
+        if(error<0){
+            PosError=false;
+        }
+
+        if(PosError!= prevPosError){
+            sumError=0;
+        }
+
+      prevPosError=true;
+        if(error<0){
+            prevPosError=false;
+        }
+        if(error<23){
             sumError+=error;
             power+= sumError*i;
         }

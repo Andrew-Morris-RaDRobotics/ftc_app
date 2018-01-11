@@ -66,7 +66,7 @@ public class AutoTestEncoder extends LinearOpMode {
         waitForStart();
 
         jewelStick.setPosition(1);
-        int completed = 0;
+        int completed = 1;
         int color = 0; //1 is red 2 is blu (left side)
         double curr = 0.0;
         int stage = 0;
@@ -132,7 +132,9 @@ public class AutoTestEncoder extends LinearOpMode {
                     if (stage == 0) {
                         //Motors.setP(0, 0, target/50);
                         telemetry.addData("turning to", target);
-                        isComplete = turn.turnT(target, 0.008, 0.0005, 0.0, 1);
+                       // telemetry.addData("i", turn.turnT(target, 0.004, 0.001, 0.0, 1));
+                        isComplete = turn.turnT(target, 0.005, 0.0005, 0.0, 1);
+                        telemetry.addData("i",isComplete);
                         //isComplete = turn.turnT(target, p, 0, 0.0, 1);
                     }
                     if (isComplete == 0.0) {
