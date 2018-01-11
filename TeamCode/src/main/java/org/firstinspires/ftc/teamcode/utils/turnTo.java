@@ -69,7 +69,7 @@ public class turnTo {
         if(error<0){
             prevPosError=false;
         }
-        if(error<23){
+        if(prev-error<1){
             sumError+=error;
             power+= sumError*i;
         }
