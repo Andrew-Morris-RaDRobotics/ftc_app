@@ -235,20 +235,21 @@ turn.reset();
 
         //floppers
 
-        if (gamepad2.a) {
-            floppers = 1;
-        } else if (gamepad2.x) {
-            floppers = -1;
-        } else if (gamepad2.b) {
-            floppers = 0;
-        }
-        if (floppers == 1) {
-            intakeDrive.setPower(speed2);
-        } else if (floppers == -1) {
-            intakeDrive.setPower(-speed2);
-        } else {
-            intakeDrive.setPower(0);
-        }
+//        if (gamepad2.a) {
+//            floppers = 1;
+//        } else if (gamepad2.x) {
+//            floppers = -1;
+//        } else if (gamepad2.b) {
+//            floppers = 0;
+//        }
+//        if (floppers == 1) {
+//            intakeDrive.setPower(speed2);
+//        } else if (floppers == -1) {
+//            intakeDrive.setPower(-speed2);
+//        } else {
+//            intakeDrive.setPower(0);
+//        }
+        intakeDrive.setPower(gamepad2.left_stick_y*speed2);
 
         if (gamepad2.left_bumper) {
             fwopperDrive.setPower(speed2);
@@ -269,7 +270,7 @@ turn.reset();
 
         telemetry.addData("pos", position);
         telemetry.update();
-        intakeBucket.setPosition(.68 - (gamepad2.left_trigger * .5));
+        intakeBucket.setPosition(.68 - (gamepad2.left_trigger * .56));
         //jewelStick.setPosition(.1 + gamepad1.left_trigger);
 
        // double pitch = testGyro.getPitch();
