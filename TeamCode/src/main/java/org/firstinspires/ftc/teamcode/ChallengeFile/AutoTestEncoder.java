@@ -181,6 +181,9 @@ public class AutoTestEncoder extends LinearOpMode {
                 if(fr.getCurrentPosition()<500) {
                     Motors.setP(0, 0.3, 0);
                 }
+                else{
+                    Motors.setP(0,0,0);
+                }
 
 //                if (fr.getCurrentPosition()<1000) {
 //                    Motors.setP(0.3,0,0);
