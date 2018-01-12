@@ -34,10 +34,12 @@ public class TeleOp extends OpMode {
     boolean balanceEnabled;
     boolean offBalance;
     double angle2 = 0;
-    boolean tankdrive = false;
+    boolean omnidrive = false;
     boolean startPressed = false;
     boolean gyroReset = false;
     boolean Driving;
+    double i;
+    double p;
     //    Servo leftSorter;
 //    Servo rightSorter;
     @Override
@@ -95,26 +97,26 @@ telemetry.addData("x",gamepad1.left_stick_x);
 
         if (gamepad1.y && startPressed == false) {
             startPressed = true;
-            tankdrive=!tankdrive;
+            omnidrive=!omnidrive;
         } else if (!gamepad1.y) {
             startPressed = false;
         }
 
 
 
-        telemetry.addData("Tankdrive",tankdrive);
+        telemetry.addData("Omnidrive",omnidrive);
         telemetry.addData("balanceEnabled",balanceEnabled);
-        telemetry.addData("drivin",Driving );
-        if(gamepad1.a){
-            balanceEnabled=true;
-
-        }
-        if(gamepad1.b){
-            balanceEnabled=false;
-        }
+        telemetry.addData("driving",Driving );
+//        if(gamepad1.a){
+//            balanceEnabled=true;
+//
+//        }
+//        if(gamepad1.b){
+//            balanceEnabled=false;
+//        }
 
         //System.out.println(gamepad1.right_bumper);
-        if (!tankdrive && Driving) {
+        if (!omnidrive && Driving) {
             double x2 = gamepad1.left_stick_x;
             double y2 = -1 * gamepad1.left_stick_y;
             if (x2 > 0 && y2 > 0) {
@@ -148,7 +150,7 @@ telemetry.addData("x",gamepad1.left_stick_x);
                 bl.setPower(-1 * gamepad1.right_stick_x * speed);
             }
         }
-        else if(tankdrive && Driving){
+        else if(omnidrive && Driving){
             double frSpeed = (speed) * (-gamepad1.left_stick_y - gamepad1.left_stick_x - gamepad1.right_stick_x);
             double flSpeed = (speed) * (+gamepad1.left_stick_y - gamepad1.left_stick_x - gamepad1.right_stick_x);
             double brSpeed = (speed) * (-gamepad1.left_stick_y + gamepad1.left_stick_x - gamepad1.right_stick_x);
@@ -159,19 +161,19 @@ telemetry.addData("x",gamepad1.left_stick_x);
             br.setPower(brSpeed);
             bl.setPower(blSpeed);
         } else if(gamepad1.dpad_up){
-           telemetry.addData("i", turn.turnT(0, 0.0035, 0.0003, 0.0, 1));
+           telemetry.addData("i", turn.turnT(0, 0.0052, 0.002, 0.0, 1));
         }
 
         else if(gamepad1.dpad_down){
-            telemetry.addData("i", turn.turnT(179.9,0.0035, 0.0003, 0.0, 1));
+            telemetry.addData("i", turn.turnT(179.9,0.0052, 0.002, 0.0, 1));
         }
 
         else if(gamepad1.dpad_right){
-            telemetry.addData("i",  turn.turnT(-90, 0.0035, 0.0003, 0.0, 1));
+            telemetry.addData("i",  turn.turnT(-90, 0.0052, 0.002, 0.0, 1));
         }
 
         else if(gamepad1.dpad_left){
-            telemetry.addData("i", turn.turnT(90, 0.0035, 0.0003, 0.0, 1));
+            telemetry.addData("i", turn.turnT(90, 0.0052, 0.002, 0.0, 1));
         }
         else if(!Driving && balanceEnabled){
 turn.reset();

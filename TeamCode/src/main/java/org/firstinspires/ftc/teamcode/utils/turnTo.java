@@ -69,15 +69,22 @@ public class turnTo {
         if(error<0){
             prevPosError=false;
         }
-        if(prev-error<1){
+        if(Math.abs(prev-error)<2){
             sumError+=error;
+            if(sumError*i>.27){
+                sumError=.27;
+            }
             power+= sumError*i;
         }
         else{
             sumError=0;
         }
-
-
+        if(power>.3){
+            power=.3;
+        }
+        if(power<-.3){
+            power=-.3;
+        }
 
         // + -predictedError*i;// + sumError*i + d*(error-prev);//-10 - -11
 
@@ -89,7 +96,7 @@ public class turnTo {
         }
         else{
             setP(power);
-            return power*i;
+            return power;
         }
 
 

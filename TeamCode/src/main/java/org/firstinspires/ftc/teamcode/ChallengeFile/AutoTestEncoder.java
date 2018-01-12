@@ -33,10 +33,7 @@ public class AutoTestEncoder extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-    glyph= new GlyphVision(hardwareMap);
-        testGyro = new gyroCompass(hardwareMap);
-        turn = new turnTo(hardwareMap, testGyro);
-        Motors = new motorDeclaration(hardwareMap);
+
         double COUNTS_PER_MOTOR_REV = 1440;    // eg: TETRIX Motor Encoder
         double DRIVE_GEAR_REDUCTION = 2.0;     // This is < 1.0 if geared UP
         double WHEEL_DIAMETER_INCHES = 4.0;     // For figuring circumference
@@ -47,6 +44,14 @@ public class AutoTestEncoder extends LinearOpMode {
         fl = hardwareMap.dcMotor.get("fl");
         bl = hardwareMap.dcMotor.get("bl");
         br = hardwareMap.dcMotor.get("br");
+        fr.setDirection(DcMotor.Direction.REVERSE);
+        fl.setDirection(DcMotor.Direction.REVERSE);
+        bl.setDirection(DcMotor.Direction.REVERSE);
+        br.setDirection(DcMotor.Direction.REVERSE);
+        glyph= new GlyphVision(hardwareMap);
+        testGyro = new gyroCompass(hardwareMap);
+        turn = new turnTo(hardwareMap, testGyro);
+        Motors = new motorDeclaration(hardwareMap);
         fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         fr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -97,13 +102,13 @@ public class AutoTestEncoder extends LinearOpMode {
                         telemetry.addData("left side is red", "right side is blue");
                         color = 2;
                         curr = testGyro.getHeading();
-                        target = curr - 15;
+                        target = -25;
                         // sleep(1000);
                     } else if (leftJewel.red() + 1 < rightJewel.red() && rightJewel.blue() + 1 < leftJewel.blue()) {
                         telemetry.addData("right side is red", "left side is blue");
                         color = 1;
                         curr = testGyro.getHeading();
-                        target = curr + 15;
+                        target = 25;
                         //sleep(1000);
 
                     } else {
@@ -133,7 +138,8 @@ public class AutoTestEncoder extends LinearOpMode {
                         //Motors.setP(0, 0, target/50);
                         telemetry.addData("turning to", target);
                        // telemetry.addData("i", turn.turnT(target, 0.004, 0.001, 0.0, 1));
-                        isComplete = turn.turnT(target, 0.005, 0.0005, 0.0, 1);
+                        // telemetry.addData("i", turn.turnT(0, 0.0052, 0.002, 0.0, 1));
+                        isComplete = turn.turnT(target, 0.007, 0.0005, 0.0, 3);
                         telemetry.addData("i",isComplete);
                         //isComplete = turn.turnT(target, p, 0, 0.0, 1);
                     }
@@ -145,7 +151,7 @@ public class AutoTestEncoder extends LinearOpMode {
                     }
                     if (stage == 1) {
                         telemetry.addData("turning to 0", "ye");
-                        isComplete = turn.turnT(0, p, 0, 0.0, 1);
+                        isComplete = turn.turnT(0, 0.007, .0005, 0.0, 1);
 
                         // completed++;
                     }
@@ -158,10 +164,7 @@ public class AutoTestEncoder extends LinearOpMode {
                         fr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                         bl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-                        fr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                        fl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                        br.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                        bl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
                         completed++;
                     }
                     telemetry.addData("comp:", completed);
@@ -172,27 +175,27 @@ public class AutoTestEncoder extends LinearOpMode {
 //
 //
             if (completed == 2) {
-//                telemetry.addData("Path0", "Starting at %7d :%7d",
-//                        fr.getCurrentPosition(),
-//                        bl.getCurrentPosition());
-//                if(fr.getCurrentPosition()<500) {
-//                    Motors.setP(0, 0.3, 0);
-//                }
+                telemetry.addData("Path0", "Starting at %7d :%7d",
+                        fr.getCurrentPosition(),
+                        bl.getCurrentPosition());
+                if(fr.getCurrentPosition()<500) {
+                    Motors.setP(0, 0.3, 0);
+                }
 
 //                if (fr.getCurrentPosition()<1000) {
 //                    Motors.setP(0.3,0,0);
 //                }
-                fr.setTargetPosition(-500);
-                fr.setPower(0.3);
-
-                fl.setTargetPosition(500);
-                fl.setPower(0.3);
-
-                br.setTargetPosition(500);
-                br.setPower(0.3);
-
-                bl.setTargetPosition(-500);
-                bl.setPower(0.3);
+//                fr.setTargetPosition(-500);
+//                fr.setPower(0.3);
+//
+//                fl.setTargetPosition(500);
+//                fl.setPower(0.3);
+//
+//                br.setTargetPosition(500);
+//                br.setPower(0.3);
+//
+//                bl.setTargetPosition(-500);
+//                bl.setPower(0.3);
 
                     telemetry.addData("done!","ye");
 
