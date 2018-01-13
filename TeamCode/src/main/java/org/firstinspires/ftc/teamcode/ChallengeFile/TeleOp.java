@@ -107,13 +107,13 @@ telemetry.addData("x",gamepad1.left_stick_x);
         telemetry.addData("Omnidrive",omnidrive);
         telemetry.addData("balanceEnabled",balanceEnabled);
         telemetry.addData("driving",Driving );
-//        if(gamepad1.a){
-//            balanceEnabled=true;
-//
-//        }
-//        if(gamepad1.b){
-//            balanceEnabled=false;
-//        }
+        if(gamepad1.a){
+            balanceEnabled=true;
+
+        }
+        if(gamepad1.b){
+            balanceEnabled=false;
+        }
 
         //System.out.println(gamepad1.right_bumper);
         if (!omnidrive && Driving) {
@@ -223,14 +223,14 @@ turn.reset();
             conveyorP = 1;
         } else if (gamepad2.dpad_up) {
             conveyorP = -1;
-        } else {
+        } else if(gamepad2.dpad_left || gamepad2.dpad_right){
             conveyorP = 0;
         }
 
         if (conveyorP == 1) {
-            conveyor.setPower(speed2 - .1);
+            conveyor.setPower(speed2 - .22);
         } else if (conveyorP == -1) {
-            conveyor.setPower(-speed2 + .1);
+            conveyor.setPower(-speed2 + .22);
         } else {
             conveyor.setPower(0);
         }

@@ -57,15 +57,15 @@ public class autoGlyphDrive extends LinearOpMode {
             motors.setP(0,0,0);
         }
 
-        if (fwopperDrive.getCurrentPosition()<500) {
-            intake.driveIntake(0.3);
-        }
-        else {
-            intake.driveIntake(0);
-        }
+//        if (fwopperDrive.getCurrentPosition()<500) {
+//            intake.driveIntake(0.3);
+//        }
+//        else {
+//            intake.driveIntake(0);
+//        }
 
         if (intakeDrive.getCurrentPosition()<500) {
-            intake.runAll(1,1);
+            intake.runConveyor(1);
             if (ratio>0.5 && ratio<0.8) {
                 glyphColor=2;
             } else if (ratio>0.8 && ratio<0.9) {
