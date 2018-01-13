@@ -14,9 +14,9 @@ import org.firstinspires.ftc.teamcode.utils.gyroCompass;
 import org.firstinspires.ftc.teamcode.utils.motorDeclaration;
 import org.firstinspires.ftc.teamcode.utils.turnTo;
 
-@Autonomous (name= "BlueJewelLeft", group= "competition")
+@Autonomous (name= "AutotestEncoder", group= "competition")
 
-public class BlueJewelLeft extends LinearOpMode {
+public class AutoTestEncoder extends LinearOpMode {
 
     public Servo jewelStick;
     public ColorSensor leftJewel;
@@ -48,7 +48,7 @@ public class BlueJewelLeft extends LinearOpMode {
         fl.setDirection(DcMotor.Direction.REVERSE);
         bl.setDirection(DcMotor.Direction.REVERSE);
         br.setDirection(DcMotor.Direction.REVERSE);
-        glyph = new GlyphVision(hardwareMap);
+        glyph= new GlyphVision(hardwareMap);
         testGyro = new gyroCompass(hardwareMap);
         turn = new turnTo(hardwareMap, testGyro);
         Motors = new motorDeclaration(hardwareMap);
@@ -75,7 +75,7 @@ public class BlueJewelLeft extends LinearOpMode {
         int color = 0; //1 is red 2 is blu (left side)
         double curr = 0.0;
         int stage = 0;
-        double isComplete = 1;
+        double isComplete=1;
         double p = .0019;
         double i = .0003;
         int updatin = 0;
@@ -83,15 +83,15 @@ public class BlueJewelLeft extends LinearOpMode {
         RelicRecoveryVuMark matchGlyph = null;
         while (opModeIsActive()) {
 
-            if (completed == 0) {
+            if(completed==0){
 
-                matchGlyph = glyph.getGlyph();
+              matchGlyph= glyph.getGlyph();
 
-                if (matchGlyph != null) {
+                if(matchGlyph!=null){
                     completed++;
                 }
             }
-            telemetry.addData("glyph: ", matchGlyph);
+            telemetry.addData("glyph: ",matchGlyph);
             telemetry.addData("Completedvar", completed);
 
             if (completed == 1) {
@@ -137,10 +137,10 @@ public class BlueJewelLeft extends LinearOpMode {
                     if (stage == 0) {
                         //Motors.setP(0, 0, target/50);
                         telemetry.addData("turning to", target);
-                        // telemetry.addData("i", turn.turnT(target, 0.004, 0.001, 0.0, 1));
+                       // telemetry.addData("i", turn.turnT(target, 0.004, 0.001, 0.0, 1));
                         // telemetry.addData("i", turn.turnT(0, 0.0052, 0.002, 0.0, 1));
                         isComplete = turn.turnT(target, 0.007, 0.0005, 0.0, 3);
-                        telemetry.addData("i", isComplete);
+                        telemetry.addData("i",isComplete);
                         //isComplete = turn.turnT(target, p, 0, 0.0, 1);
                     }
                     if (isComplete == 0.0) {
@@ -178,14 +178,35 @@ public class BlueJewelLeft extends LinearOpMode {
                 telemetry.addData("Path0", "Starting at %7d :%7d",
                         fr.getCurrentPosition(),
                         bl.getCurrentPosition());
-                if (fr.getCurrentPosition() < 500) {
-                    Motors.setP(-.3, 0, 0);
-
+                if(fr.getCurrentPosition()<500) {
+                    Motors.setP(0, 0.3, 0);
                 }
                 else{
                     Motors.setP(0,0,0);
                 }
+
+//                if (fr.getCurrentPosition()<1000) {
+//                    Motors.setP(0.3,0,0);
+//                }
+//                fr.setTargetPosition(-500);
+//                fr.setPower(0.3);
+//
+//                fl.setTargetPosition(500);
+//                fl.setPower(0.3);
+//
+//                br.setTargetPosition(500);
+//                br.setPower(0.3);
+//
+//                bl.setTargetPosition(-500);
+//                bl.setPower(0.3);
+
+                    telemetry.addData("done!","ye");
+
+
             }
+
+telemetry.update();
         }
+
     }
 }

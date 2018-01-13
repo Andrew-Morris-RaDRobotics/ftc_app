@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.utils.motorDeclaration;
 /**
  * Created by Andrew on 12/16/2017.
  */
-@Autonomous(name = "autoGlyphDrive", group = "testing")
+//@Autonomous(name = "autoGlyphDrive", group = "testing")
 public class autoGlyphDrive extends LinearOpMode {
     //motorDeclaration motors = new motorDeclaration(hardwareMap);
     int OpCount = 0;
