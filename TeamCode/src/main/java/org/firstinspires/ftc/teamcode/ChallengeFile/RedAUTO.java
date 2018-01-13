@@ -8,15 +8,13 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
-import org.firstinspires.ftc.teamcode.utils.GlyphVision;
 import org.firstinspires.ftc.teamcode.utils.gyroCompass;
 import org.firstinspires.ftc.teamcode.utils.motorDeclaration;
 import org.firstinspires.ftc.teamcode.utils.turnTo;
 
-@Autonomous (name= "RedJewel", group= "competition")
+@Autonomous (name= "RedAUTOStanley", group= "competition")
 
-public class RedJewel extends LinearOpMode {
+public class RedAUTO extends LinearOpMode {
 
     public Servo jewelStick;
     public ColorSensor leftJewel;
@@ -27,8 +25,9 @@ public class RedJewel extends LinearOpMode {
     public DcMotor bl;
     public motorDeclaration Motors;
     public gyroCompass testGyro;
-    ElapsedTime runtime = new ElapsedTime();
+    //ElapsedTime runtime = new ElapsedTime();
     public turnTo turn;
+
    // public GlyphVision glyph;
 
     @Override
@@ -79,6 +78,8 @@ public class RedJewel extends LinearOpMode {
         double i = .0003;
         int updatin = 0;
         int Timer = 0;
+        ElapsedTime     runtime = new ElapsedTime();
+        runtime.reset();
        // RelicRecoveryVuMark matchGlyph = null;
         while (opModeIsActive()) {
 
@@ -96,8 +97,11 @@ public class RedJewel extends LinearOpMode {
             if (completed == 1) {
                 if (color == 0) {
 
-
-                    if (leftJewel.red() - 2 > rightJewel.red() && rightJewel.blue() - 2 > leftJewel.blue()) {
+                    if(runtime.seconds()>7.0){
+                        target = 0;
+                        color=3;
+                    }
+                    else if (leftJewel.red() - 2 > rightJewel.red() && rightJewel.blue() - 2 > leftJewel.blue()) {
                         telemetry.addData("left side is red", "right side is blue");
                         color = 2;
                         curr = testGyro.getHeading();
@@ -138,7 +142,7 @@ public class RedJewel extends LinearOpMode {
                         telemetry.addData("turning to", target);
                         // telemetry.addData("i", turn.turnT(target, 0.004, 0.001, 0.0, 1));
                         // telemetry.addData("i", turn.turnT(0, 0.0052, 0.002, 0.0, 1));
-                        isComplete = turn.turnT(target, 0.005, 0.0004, 0.0, 3);
+                        isComplete = turn.turnT(target, 0.008, 0.0004, 0.0, 3);
                         telemetry.addData("i", isComplete);
                         //isComplete = turn.turnT(target, p, 0, 0.0, 1);
                     }
@@ -194,16 +198,16 @@ public class RedJewel extends LinearOpMode {
 //                else{
 //                    Motors.setP(0,0,0);
 //                }
-                fr.setTargetPosition(-900);
+                fr.setTargetPosition(900);
                 fr.setPower(0.25);
 
-                fl.setTargetPosition(900);
+                fl.setTargetPosition(-900);
                 fl.setPower(0.25);
 
-                br.setTargetPosition(-900);
+                br.setTargetPosition(900);
                 br.setPower(0.25);
 
-                bl.setTargetPosition(900);
+                bl.setTargetPosition(-900);
                 bl.setPower(0.25);
             }
             telemetry.update();

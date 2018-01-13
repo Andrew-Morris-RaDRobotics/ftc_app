@@ -73,7 +73,7 @@ public class TeleOp extends OpMode {
     @Override
     public void loop() {
 
-        if(gamepad1.start && !gyroReset){
+        if(gamepad1.start && !gyroReset && !gamepad1.a && !gamepad1.b){
             gyroReset=true;
             testGyro.reset();
         }
@@ -92,7 +92,7 @@ telemetry.addData("x",gamepad1.left_stick_x);
         }
         double speed = 0.35;
         double speed2 = 0.7;
-        speed = speed + gamepad1.right_trigger * 0.65;
+        speed = speed + gamepad1.right_trigger * 0.65 - gamepad1.left_trigger*0.25;
         speed2 = speed2 + gamepad2.right_trigger / 1.65;
 
         if (gamepad1.y && startPressed == false) {
@@ -177,7 +177,7 @@ telemetry.addData("x",gamepad1.left_stick_x);
         }
         else if(!Driving && balanceEnabled){
 turn.reset();
-            double pitch = testGyro.getPitch();
+            double pitch = -1*testGyro.getPitch();
             double roll = -1 * (testGyro.getRoll());
 
             double asdf = testGyro.getHeading();
@@ -194,10 +194,10 @@ turn.reset();
                     pitch = 0;
                 }
 
-                fr.setPower(-(.032) * (-roll + pitch));
-                fl.setPower(-(.032) * (+roll + pitch));
-                br.setPower(-(.032) * (-roll - pitch));
-                bl.setPower(-(.032) * (+roll - pitch));
+                fr.setPower((speed-.3) * (-roll + pitch));
+                fl.setPower((speed-.3) * (+roll + pitch));
+                br.setPower((speed-.3) * (-roll - pitch));
+                bl.setPower((speed-.3) * (+roll - pitch));
                 telemetry.addData("balancing",".");
             }
             else {
@@ -236,15 +236,15 @@ turn.reset();
         }
 
         //floppers
-        double intake = speed2 * -gamepad2.left_stick_y;
-        double inverseIntake = speed2 * gamepad2.left_stick_y;
-        if (gamepad2.a) {
-            intakeDrive.setPower(intake);
-        } else if (gamepad2.x) {
-            intakeDrive.setPower(inverseIntake);
-        } else {
-            intakeDrive.setPower(0);
-        }
+//        double intake = speed2 * -gamepad2.left_stick_y;
+//        double inverseIntake = speed2 * gamepad2.left_stick_y;
+//        if (gamepad2.a) {
+//            intakeDrive.setPower(intake);
+//        } else if (gamepad2.x) {
+//            intakeDrive.setPower(inverseIntake);
+//        } else {
+//            intakeDrive.setPower(0);
+//        }
         intakeDrive.setPower(gamepad2.left_stick_y*speed2);
 
         if (gamepad2.left_bumper) {
@@ -266,8 +266,8 @@ turn.reset();
 
         telemetry.addData("pos", position);
         telemetry.update();
-        intakeBucket.setPosition(.68 - (gamepad2.left_trigger * .56));
-        //jewelStick.setPosition(.1 + gamepad1.left_trigger);
+        intakeBucket.setPosition(.62 - (gamepad2.left_trigger * .5));
+        jewelStick.setPosition(.1);
 
        // double pitch = testGyro.getPitch();
        // double roll = -1 * (testGyro.getRoll());

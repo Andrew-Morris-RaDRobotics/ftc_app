@@ -12,26 +12,27 @@ import org.firstinspires.ftc.teamcode.utils.gyroCompass;
 import org.firstinspires.ftc.teamcode.utils.motorDeclaration;
 import org.firstinspires.ftc.teamcode.utils.turnTo;
 
-@Autonomous (name= "BlueJewel", group= "competition")
+@Autonomous (name= "RedAUTOTest", group= "competition")
 
-public class BlueJewel extends LinearOpMode {
+public class RedAUTOTest extends LinearOpMode {
 
     public Servo jewelStick;
     public ColorSensor leftJewel;
     public ColorSensor rightJewel;
     public DcMotor fl;
     public DcMotor fr;
+    DcMotor conveyor;
     public DcMotor br;
     public DcMotor bl;
     public motorDeclaration Motors;
     public gyroCompass testGyro;
-    ElapsedTime runtime = new ElapsedTime();
+    //sElapsedTime runtime = new ElapsedTime();
     public turnTo turn;
    // public GlyphVision glyph;
 
     @Override
     public void runOpMode() throws InterruptedException {
-
+        conveyor = hardwareMap.dcMotor.get("conveyer");
         double COUNTS_PER_MOTOR_REV = 1440;    // eg: TETRIX Motor Encoder
         double DRIVE_GEAR_REDUCTION = 2.0;     // This is < 1.0 if geared UP
         double WHEEL_DIAMETER_INCHES = 4.0;     // For figuring circumference
@@ -77,6 +78,8 @@ public class BlueJewel extends LinearOpMode {
         double i = .0003;
         int updatin = 0;
         int Timer = 0;
+         ElapsedTime     runtime = new ElapsedTime();
+        runtime.reset();
        // RelicRecoveryVuMark matchGlyph = null;
         while (opModeIsActive()) {
 
@@ -94,14 +97,17 @@ public class BlueJewel extends LinearOpMode {
             if (completed == 1) {
                 if (color == 0) {
 
-
-                    if (leftJewel.red() - 2 > rightJewel.red() && rightJewel.blue() - 2 > leftJewel.blue()) {
+                    if(runtime.seconds()>7.0){
+                        target = 0;
+                        color=3;
+                    }
+                    else if (leftJewel.red() - 3 > rightJewel.red() && rightJewel.blue() - 3 > leftJewel.blue()) {
                         telemetry.addData("left side is red", "right side is blue");
                         color = 2;
                         curr = testGyro.getHeading();
                         target = 25;
                         // sleep(1000);
-                    } else if (leftJewel.red() + 2 < rightJewel.red() && rightJewel.blue() + 2 < leftJewel.blue()) {
+                    } else if (leftJewel.red() + 3 < rightJewel.red() && rightJewel.blue() + 3 < leftJewel.blue()) {
                         telemetry.addData("right side is red", "left side is blue");
                         color = 1;
                         curr = testGyro.getHeading();
@@ -136,7 +142,7 @@ public class BlueJewel extends LinearOpMode {
                         telemetry.addData("turning to", target);
                         // telemetry.addData("i", turn.turnT(target, 0.004, 0.001, 0.0, 1));
                         // telemetry.addData("i", turn.turnT(0, 0.0052, 0.002, 0.0, 1));
-                        isComplete = turn.turnT(target, 0.008, 0.0004, 0.0, 3);
+                        isComplete = turn.turnT(target, 0.005, 0.0004, 0.0, 3);
                         telemetry.addData("i", isComplete);
                         //isComplete = turn.turnT(target, p, 0, 0.0, 1);
                     }
@@ -173,6 +179,7 @@ public class BlueJewel extends LinearOpMode {
 
 
                         completed++;
+                        runtime.reset();
                     }
                     //telemetry.addData("comp:", completed);
                 }
@@ -203,6 +210,103 @@ public class BlueJewel extends LinearOpMode {
 
                 bl.setTargetPosition(900);
                 bl.setPower(0.25);
+                if(runtime.seconds()>3){
+                    completed++;
+                    runtime.reset();
+                }
+            }
+            if(completed==3){
+                conveyor.setPower(-.3);
+                if(runtime.seconds()>6){
+                    completed++;
+                    runtime.reset();
+                    fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    br.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    bl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    fr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    fl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                }
+            }
+            if(completed==4){
+                fr.setTargetPosition(200);
+                fr.setPower(0.25);
+
+                fl.setTargetPosition(-200);
+                fl.setPower(0.25);
+
+                br.setTargetPosition(200);
+                br.setPower(0.25);
+
+                bl.setTargetPosition(-200);
+                bl.setPower(0.25);
+                if(runtime.seconds()>3){
+                    completed++;
+                    runtime.reset();
+                    fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    br.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    bl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    fr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    fl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                }
+
+            }
+            if(completed==5){
+                fr.setTargetPosition(-250);
+                fr.setPower(0.25);
+
+                fl.setTargetPosition(250);
+                fl.setPower(0.25);
+
+                br.setTargetPosition(-250);
+                br.setPower(0.25);
+
+                bl.setTargetPosition(250);
+                bl.setPower(0.25);
+                if(runtime.seconds()>3){
+                    completed++;
+                    runtime.reset();
+                    fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    br.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    bl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    fr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    fl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                }
+
+            }
+            if(completed==6){
+                fr.setTargetPosition(100);
+                fr.setPower(0.25);
+
+                fl.setTargetPosition(-100);
+                fl.setPower(0.25);
+
+                br.setTargetPosition(100);
+                br.setPower(0.25);
+
+                bl.setTargetPosition(-100);
+                bl.setPower(0.25);
+                if(runtime.seconds()>3){
+                    completed++;
+                    runtime.reset();
+                    fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    br.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    bl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    fr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    fl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                }
+
             }
             telemetry.update();
         }
