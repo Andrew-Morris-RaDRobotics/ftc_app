@@ -23,7 +23,10 @@ public class BlueJewelBLOCK extends LinearOpMode {
     public DcMotor fr;
     public DcMotor br;
     public DcMotor bl;
-    DcMotor conveyor;
+    public DcMotor conveyor;
+    public DcMotor sorterRaise;
+    public Servo leftSorter;
+    public Servo rightSorter;
     public motorDeclaration Motors;
     public gyroCompass testGyro;
     ElapsedTime runtime = new ElapsedTime();
@@ -43,6 +46,9 @@ public class BlueJewelBLOCK extends LinearOpMode {
         fl = hardwareMap.dcMotor.get("fl");
         bl = hardwareMap.dcMotor.get("bl");
         br = hardwareMap.dcMotor.get("br");
+        sorterRaise = hardwareMap.dcMotor.get("sorterRaise");
+        leftSorter = hardwareMap.servo.get("leftSorter");
+        rightSorter = hardwareMap.servo.get("rightSorter");
         fr.setDirection(DcMotor.Direction.REVERSE);
         fl.setDirection(DcMotor.Direction.REVERSE);
         bl.setDirection(DcMotor.Direction.REVERSE);
@@ -97,13 +103,13 @@ public class BlueJewelBLOCK extends LinearOpMode {
                 if (color == 0) {
 
 
-                    if (leftJewel.red() - 2 > rightJewel.red() && rightJewel.blue() - 2 > leftJewel.blue()) {
+                    if (leftJewel.red() - 2 > rightJewel.red() && rightJewel.blue() - 2 > leftJewel.blue() && leftJewel.red()>8 && rightJewel.blue()>8) {
                         telemetry.addData("left side is red", "right side is blue");
                         color = 2;
                         curr = testGyro.getHeading();
                         target = 25;
                         // sleep(1000);
-                    } else if (leftJewel.red() + 2 < rightJewel.red() && rightJewel.blue() + 2 < leftJewel.blue()) {
+                    } else if (leftJewel.red() + 2 < rightJewel.red() && rightJewel.blue() + 2 < leftJewel.blue() && rightJewel.red()>8 && leftJewel.blue()>8) {
                         telemetry.addData("right side is red", "left side is blue");
                         color = 1;
                         curr = testGyro.getHeading();
@@ -168,10 +174,12 @@ public class BlueJewelBLOCK extends LinearOpMode {
                         bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                         fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                         br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                        sorterRaise.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                         br.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                         bl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                         fr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                         fl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                        sorterRaise.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
                         TimeSpin=0;
                         completed++;
@@ -197,6 +205,9 @@ public class BlueJewelBLOCK extends LinearOpMode {
 //                else{
 //                    Motors.setP(0,0,0);
 //                }
+                sorterRaise.setTargetPosition(750);
+                sorterRaise.setPower(0.25);
+
                 fr.setTargetPosition(-910);
                 fr.setPower(0.25);
 

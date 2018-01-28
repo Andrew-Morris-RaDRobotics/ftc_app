@@ -11,14 +11,17 @@ import java.util.Locale;
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "Distance Sensor", group = "testing")
 public class DistanceSensorTest extends OpMode{
     DistanceSensor sensorDistance;
+    DistanceSensor sensorDistance2;
 
     @Override
     public void init() {
-        sensorDistance = hardwareMap.get(DistanceSensor.class, "colordistance1");
+        sensorDistance = hardwareMap.get(DistanceSensor.class, "glyphColor1");
+        sensorDistance2 = hardwareMap.get(DistanceSensor.class, "glyphColor2");
     }
 
     @Override
     public void loop() {
-        telemetry.addData("Distance", String.format(Locale.US, "%.02f", sensorDistance.getDistance(DistanceUnit.INCH)));
+        telemetry.addData("Distance2", String.format(Locale.US, "%.02f",sensorDistance2.getDistance(DistanceUnit.CM)));
+        telemetry.addData("Distance1", String.format(Locale.US, "%.02f", sensorDistance.getDistance(DistanceUnit.CM)));
     }
 }

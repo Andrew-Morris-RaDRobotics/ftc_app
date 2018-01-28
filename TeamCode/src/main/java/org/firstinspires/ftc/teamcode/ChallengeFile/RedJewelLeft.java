@@ -73,6 +73,7 @@ public class RedJewelLeft extends LinearOpMode {
         jewelStick.setPosition(1);
         int completed = 1;
         int color = 0; //1 is red 2 is blu (left side)
+        final int threshold = 1;
         double curr = 0.0;
         int stage = 0;
         double isComplete = 1;
@@ -98,13 +99,13 @@ public class RedJewelLeft extends LinearOpMode {
                 if (color == 0) {
 
 
-                    if (leftJewel.red() - 1 > rightJewel.red() && rightJewel.blue() - 1 > leftJewel.blue()) {
+                    if (leftJewel.red() - threshold > rightJewel.red() && rightJewel.blue() - threshold > leftJewel.blue() && leftJewel.red()>8 && rightJewel.blue()>8) {
                         telemetry.addData("left side is red", "right side is blue");
                         color = 1;
                         curr = testGyro.getHeading();
                         target = -25;
                         // sleep(1000);
-                    } else if (leftJewel.red() + 1 < rightJewel.red() && rightJewel.blue() + 1 < leftJewel.blue()) {
+                    } else if (leftJewel.red() + threshold < rightJewel.red() && rightJewel.blue() + threshold < leftJewel.blue() && leftJewel.blue()>8 && rightJewel.red()>8) {
                         telemetry.addData("right side is red", "left side is blue");
                         color = 2;
                         curr = testGyro.getHeading();
