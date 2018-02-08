@@ -68,7 +68,7 @@ public class RedAUTOTest extends LinearOpMode {
         double target = 0;
         waitForStart();
 
-        jewelStick.setPosition(1);
+       // jewelStick.setPosition(1);
         int completed = 1;
         int color = 0; //1 is red 2 is blu (left side)
         double curr = 0.0;

@@ -3,11 +3,14 @@ package org.firstinspires.ftc.teamcode.ChallengeFile;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.utils.drive_at_angle_psudo;
 import org.firstinspires.ftc.teamcode.utils.gyroCompass;
 import org.firstinspires.ftc.teamcode.utils.turnTo;
+
+import static java.lang.Thread.sleep;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "TeleOp", group = "ChallengeFile")
 public class TeleOp extends OpMode {
@@ -20,6 +23,7 @@ public class TeleOp extends OpMode {
     public DcMotor bl;
     Servo leftIntakeFlipper;
     Servo rightIntakeFlipper;
+    Servo conveyerTop;
     DcMotor intakeDrive;
     DcMotor fwopperDrive;
     DcMotor conveyor;
@@ -39,6 +43,7 @@ public class TeleOp extends OpMode {
     int column1 = 0;
     int column2 = 0;
     int column3 = 0;
+    int xComp = 0;
     boolean balanceEnabled;
     boolean offBalance;
     double angle2 = 0;
@@ -54,6 +59,8 @@ public class TeleOp extends OpMode {
     double cryptobox3 = 0;
 //    double ratio = glyphColor.blue() / glyphColor.red();
     boolean glyphLoaded = false;
+    boolean align = true;
+    boolean pressAlign = false;
 
     //    Servo leftSorter;
 //    Servo rightSorter;
@@ -73,10 +80,12 @@ public class TeleOp extends OpMode {
         br.setDirection(DcMotor.Direction.REVERSE);
         leftIntakeFlipper = hardwareMap.servo.get("leftIntakeFlipper");
         rightIntakeFlipper = hardwareMap.servo.get("rightIntakeFlipper");
+        conveyerTop = hardwareMap.servo.get("conveyerTop");
         intakeBucket = hardwareMap.servo.get("intakeBucket");
         intakeDrive = hardwareMap.dcMotor.get("intakeDrive");
-        intakeDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        intakeDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        intakeDrive.setDirection(DcMotor.Direction.REVERSE);
+        //intakeDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //intakeDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
 
         fwopperDrive = hardwareMap.dcMotor.get("fwopperDrive");
@@ -111,7 +120,7 @@ public class TeleOp extends OpMode {
         } else {
             Driving = false;
         }
-        double speed = 0.35;
+        double speed = 0.4;
         double speed2 = 0.7;
         speed = speed + gamepad1.right_trigger * 0.65 - gamepad1.left_trigger * 0.25;
         speed2 = speed2 + gamepad2.right_trigger / 1.65;
@@ -267,8 +276,8 @@ public class TeleOp extends OpMode {
 //        }
 
         //floppers
-//        double intake = speed2 * -gamepad2.left_stick_y;
-//        double inverseIntake = speed2 * gamepad2.left_stick_y;
+        double intake = speed2 * -gamepad2.left_stick_y;
+        double inverseIntake = speed2 * gamepad2.left_stick_y;
 //        if (gamepad2.a) {
 //            intakeDrive.setPower(intake);
 //        } else if (gamepad2.x) {
@@ -276,6 +285,8 @@ public class TeleOp extends OpMode {
 //        } else {
 //            intakeDrive.setPower(0);
 //        }
+        intakeDrive.setPower(gamepad2.left_stick_y * (speed2 + .3));
+//
 //        intake--;
 //        if (Math.abs(gamepad2.left_stick_y) > .05 && intake < 0) {
 //            intake = 3;
@@ -284,25 +295,51 @@ public class TeleOp extends OpMode {
 //        }
 //
 //        if (intake == 3) {
+//            intakeDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //            intakeDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 //        } else if (intake == 2) {
-//            intakeDrive.setPower(gamepad2.left_stick_y * speed2);
+//
 //        } else if (intake == 1) {
 //            intakeDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //            intakeDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//        } else {
 //            intakeDrive.setTargetPosition(0);
-//            intakeDrive.setPower(.1);
+//        } else {
+//            telemetry.addData("posintake",intakeDrive.getCurrentPosition());
 //            if (Math.abs(intakeDrive.getCurrentPosition()) > .3) {
-//
+//                intakeDrive.setPower(.3);
 //            }
-//
+//            else{
+//                intakeDrive.setPower(0);
+//            }
 //        }
+        if(gamepad1.x&&!pressAlign){
+            if (align) {
+                align = false;
+            } else {
+                align=true;
+            }
+            pressAlign=true;
+        }
+        else if(!gamepad1.x){
+            pressAlign=false;
+        }
 
-        if (gamepad2.left_bumper) {
-            fwopperDrive.setPower(0.5);
+        if(align){
+            conveyerTop.setPosition(.45);
+        }
+        else if(!align){
+            conveyerTop.setPosition(1);
+        }
+
+        if (gamepad1.left_bumper) {
+            fwopperDrive.setPower(1);
+        } else if (gamepad1.right_bumper) {
+            fwopperDrive.setPower(-1);
+        }
+        else if (gamepad2.left_bumper) {
+            fwopperDrive.setPower(1);
         } else if (gamepad2.right_bumper) {
-            fwopperDrive.setPower(-0.5);
+            fwopperDrive.setPower(-1);
         } else {
             fwopperDrive.setPower(0);
         }
@@ -316,44 +353,88 @@ public class TeleOp extends OpMode {
         leftIntakeFlipper.setPosition(position);
         rightIntakeFlipper.setPosition(position);
 
-//        if (ratio > 0.5 && ratio < 0.8 && glyphLoaded == false) {
-
-//            if (cryptobox1 == 0 || cryptobox1 == 2) {
-//                telemetry.addData("Recommended Column", "LEFT");
-//                cryptobox1++;
-//                glyphLoaded = true;
-//            } else if (cryptobox2 == 1 || cryptobox2 == 3) {
-//                telemetry.addData("Recommended Column", "MIDDLE");
-//                cryptobox2++;
-//                glyphLoaded = true;
-//            } else if (cryptobox3 == 0 || cryptobox3 == 2) {
-//                telemetry.addData("Recommended Column", "RIGHT");
-//                cryptobox3++;
-//                glyphLoaded = true;
+//        if(gamepad2.x) {
+//            if (xComp == 0) {
+//                fwopperDrive.setPower(1);
+//                xComp++;
+//            }
+//            else if (xComp < 6) {
+//                intakeBucket.setPosition(0);
+//                xComp++;
 //
-//            } else if (ratio > 0.8 && glyphLoaded == false) {
-//            if (cryptobox1 == 1 || cryptobox1 == 3) {
-//                telemetry.addData("Recommended Column", "LEFT");
-//                cryptobox1++;
-//                glyphLoaded = true;
 //            }
-//            if (cryptobox2 == 0 || cryptobox2 == 2) {
-//                telemetry.addData("Recommended Column", "MIDDLE");
-//                cryptobox2++;
-//                glyphLoaded = true;
-//            } else if (cryptobox3 == 1 || cryptobox3 == 3) {
-//                telemetry.addData("Recommended Column", "RIGHT");
-//                cryptobox3++;
-//                glyphLoaded = true;
+//            else if (xComp < 12 && xComp > 5) {
+//                conveyor.setPower(0.3);
+//                intakeBucket.setPosition(1);
+//                xComp++;
 //            }
-//        } else if (ratio < 0.5 && glyphLoaded == true) {
-//            glyphLoaded = false;
+//            else {
+//                conveyor.setPower(0);
+//                xComp = 0;
+//            }
+//
 //        }
-//    }
+
         telemetry.addData("pos", position);
+//        if (gamepad2.left_trigger<.05) {
+//            intakeBucket.setPosition(.62 - (gamepad2.left_trigger * .55));
+//        }
+//        else {
+//           intakeBucket.setPosition(.5);
+//        }
+
+        telemetry.addData("Gamepad1", gamepad1.left_trigger);
+        telemetry.addData("Gamepad2", gamepad2.left_trigger);
         telemetry.update();
-        intakeBucket.setPosition(.62 - (gamepad2.left_trigger * .62));
-        jewelStick.setPosition(.1);
+
+        if(gamepad1.left_trigger<.05) {
+            intakeBucket.setPosition(.62 - (gamepad2.left_trigger * .61));
+        }
+        else {
+            intakeBucket.setPosition(.62 - (gamepad1.left_trigger * .61));
+        }
+
+        jewelStick.setPosition(.5);
+
+        if (gamepad1.left_stick_button) {
+            if(fr.getMode() == DcMotor.RunMode.RUN_WITHOUT_ENCODER) {
+                fr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                bl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                fl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            }
+            if(fr.getMode() == DcMotor.RunMode.RUN_USING_ENCODER) {
+                fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            }
+            else if(fr.getMode() == DcMotor.RunMode.STOP_AND_RESET_ENCODER){
+                br.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                bl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                fr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                fl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            }
+            else if(fr.getMode() == DcMotor.RunMode.RUN_TO_POSITION){
+                br.setTargetPosition(0);
+                fr.setTargetPosition(0);
+                bl.setTargetPosition(0);
+                fl.setTargetPosition(0);
+
+                br.setPower(.4);
+                bl.setPower(.4);
+                fr.setPower(.4);
+                fl.setPower(.4);
+
+            }
+        }
+        else{
+            fr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            br.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            bl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        }
 
         // double pitch = testGyro.getPitch();
         // double roll = -1 * (testGyro.getRoll());

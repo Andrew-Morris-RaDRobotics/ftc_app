@@ -68,7 +68,7 @@ public class RedAutoCOMP extends LinearOpMode {
         double target = 0;
         waitForStart();
 
-        jewelStick.setPosition(1);
+       // jewelStick.setPosition(1);
         int completed = 1;
         int color = 0; //1 is red 2 is blu (left side)
         double curr = 0.0;
@@ -96,10 +96,16 @@ public class RedAutoCOMP extends LinearOpMode {
 
             if (completed == 1) {
                 if (color == 0) {
+                     if(runtime.seconds()<.5){
+                        jewelStick.setPosition(.4);
+                    }
+                    else if(runtime.seconds()<1){
+                        jewelStick.setPosition(.2);
+                    }
 
-                    if(runtime.seconds()>7.0){
+                    if(runtime.seconds()>7.0) {
                         target = 0;
-                        color=3;
+                        color = 3;
                     }
                     else if (leftJewel.red() - 5 > rightJewel.red() && rightJewel.blue() - 5 > leftJewel.blue()&& runtime.seconds()>2) {
                         telemetry.addData("left side is red", "right side is blue");
@@ -147,7 +153,7 @@ public class RedAutoCOMP extends LinearOpMode {
                         //isComplete = turn.turnT(target, p, 0, 0.0, 1);
                     }
                     if (isComplete == 0.0) {
-                        jewelStick.setPosition(0);
+                        jewelStick.setPosition(1);
                         isComplete = 1;
                         //sleep(1000);
                         stage++;
