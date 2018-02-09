@@ -61,7 +61,7 @@ public class TeleOp extends OpMode {
     boolean glyphLoaded = false;
     boolean align = true;
     boolean pressAlign = false;
-
+    boolean lock =false;
     //    Servo leftSorter;
 //    Servo rightSorter;
     @Override
@@ -97,7 +97,7 @@ public class TeleOp extends OpMode {
         floppers = 0;
         position = 0.0;
         testGyro = new gyroCompass(hardwareMap);
-        balanceEnabled = true;
+        balanceEnabled = false;
         thing = new drive_at_angle_psudo(hardwareMap);
         turn = new turnTo(hardwareMap, testGyro);
     }
@@ -367,7 +367,7 @@ public class TeleOp extends OpMode {
 //                conveyor.setPower(0.3);
 //                intakeBucket.setPosition(1);
 //                xComp++;
-//            }
+//           }
 //            else {
 //                conveyor.setPower(0);
 //                xComp = 0;
@@ -385,7 +385,7 @@ public class TeleOp extends OpMode {
 
         telemetry.addData("Gamepad1", gamepad1.left_trigger);
         telemetry.addData("Gamepad2", gamepad2.left_trigger);
-        telemetry.update();
+
 
         if(gamepad1.left_trigger<.05) {
             intakeBucket.setPosition(.62 - (gamepad2.left_trigger * .61));
@@ -395,37 +395,47 @@ public class TeleOp extends OpMode {
         }
 
         jewelStick.setPosition(.5);
-
-        if (gamepad1.left_stick_button) {
+        if(Driving){
+            lock=false;
+        }
+        else if(gamepad1.left_stick_button && lock ==false && !Driving){
+             lock=true;
+        }
+        if (lock) {
             if(fr.getMode() == DcMotor.RunMode.RUN_WITHOUT_ENCODER) {
                 fr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 bl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 fl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                telemetry.addData("run usin encoder","ye");
             }
             if(fr.getMode() == DcMotor.RunMode.RUN_USING_ENCODER) {
                 fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                telemetry.addData("reset encoder","j");
             }
             else if(fr.getMode() == DcMotor.RunMode.STOP_AND_RESET_ENCODER){
                 br.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 bl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 fr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 fl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-            }
-            else if(fr.getMode() == DcMotor.RunMode.RUN_TO_POSITION){
+                telemetry.addData("run2pos","ition");
                 br.setTargetPosition(0);
                 fr.setTargetPosition(0);
                 bl.setTargetPosition(0);
                 fl.setTargetPosition(0);
 
-                br.setPower(.4);
-                bl.setPower(.4);
-                fr.setPower(.4);
-                fl.setPower(.4);
+            }
+            else if(fr.getMode() == DcMotor.RunMode.RUN_TO_POSITION){
+
+
+                br.setPower(1);
+                bl.setPower(1);
+                fr.setPower(1);
+                fl.setPower(1);
+telemetry.addData("settin powe","r");
 
             }
         }
@@ -434,8 +444,9 @@ public class TeleOp extends OpMode {
             fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             br.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             bl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            telemetry.addData("runwoencoder","aw");
         }
-
+        telemetry.update();
         // double pitch = testGyro.getPitch();
         // double roll = -1 * (testGyro.getRoll());
 
