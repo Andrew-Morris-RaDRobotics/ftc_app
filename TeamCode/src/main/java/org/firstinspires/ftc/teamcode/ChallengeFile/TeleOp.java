@@ -27,27 +27,22 @@ public class TeleOp extends OpMode {
     DcMotor intakeDrive;
     DcMotor fwopperDrive;
     DcMotor conveyor;
-   // ColorSensor glyphColor;
-    //    Servo leftSorter;
-    //   Servo rightSorter;
     gyroCompass testGyro;
     drive_at_angle_psudo thing;
     public turnTo turn;
-
-
     Servo intakeBucket;
     Servo jewelStick;
-    int floppers;
-    double position;
-    int conveyorP;
+    int floppers = 0;
+    double position =0.0;
+    int conveyorP = 0;
     int column1 = 0;
     int column2 = 0;
     int column3 = 0;
     int xComp = 0;
-    boolean balanceEnabled;
+    boolean balanceEnabled = false;
     boolean offBalance;
     double angle2 = 0;
-    boolean omnidrive = false;
+    boolean omnidrive = true;
     boolean startPressed = false;
     boolean gyroReset = false;
     boolean Driving;
@@ -62,8 +57,7 @@ public class TeleOp extends OpMode {
     boolean align = true;
     boolean pressAlign = false;
     boolean lock =false;
-    //    Servo leftSorter;
-//    Servo rightSorter;
+
     @Override
     public void init() {
         intake = 0;
@@ -72,32 +66,25 @@ public class TeleOp extends OpMode {
         fl = hardwareMap.dcMotor.get("fl");
         bl = hardwareMap.dcMotor.get("bl");
         br = hardwareMap.dcMotor.get("br");
-//        leftSorter = hardwareMap.servo.get("leftSorter");
-//       rightSorter = hardwareMap.servo.get("rightSorter");
+
         fr.setDirection(DcMotor.Direction.REVERSE);
         fl.setDirection(DcMotor.Direction.REVERSE);
         bl.setDirection(DcMotor.Direction.REVERSE);
         br.setDirection(DcMotor.Direction.REVERSE);
+
         leftIntakeFlipper = hardwareMap.servo.get("leftIntakeFlipper");
         rightIntakeFlipper = hardwareMap.servo.get("rightIntakeFlipper");
-        conveyerTop = hardwareMap.servo.get("conveyerTop");
+        conveyerTop = hardwareMap.servo.get("conveyerTop"); //ye i kno its speld rong
         intakeBucket = hardwareMap.servo.get("intakeBucket");
+
         intakeDrive = hardwareMap.dcMotor.get("intakeDrive");
         intakeDrive.setDirection(DcMotor.Direction.REVERSE);
-        //intakeDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //intakeDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
 
         fwopperDrive = hardwareMap.dcMotor.get("fwopperDrive");
         conveyor = hardwareMap.dcMotor.get("conveyer");
-//        leftSorter = hardwareMap.servo.get("leftSorter");
-//        rightSorter = hardwareMap.servo.get("rightSorter");
-       // glyphColor = hardwareMap.colorSensor.get("glyphColor1");
-        conveyorP = 0;
-        floppers = 0;
-        position = 0.0;
+
         testGyro = new gyroCompass(hardwareMap);
-        balanceEnabled = false;
+
         thing = new drive_at_angle_psudo(hardwareMap);
         turn = new turnTo(hardwareMap, testGyro);
     }
@@ -257,9 +244,9 @@ public class TeleOp extends OpMode {
         }
 
         if (conveyorP == 1) {
-            conveyor.setPower(speed2 - .3);
+            conveyor.setPower(speed2 - .31);
         } else if (conveyorP == -1) {
-            conveyor.setPower(-speed2 + .265);
+            conveyor.setPower(-speed2 + .245);
         } else {
             conveyor.setPower(0);
         }
