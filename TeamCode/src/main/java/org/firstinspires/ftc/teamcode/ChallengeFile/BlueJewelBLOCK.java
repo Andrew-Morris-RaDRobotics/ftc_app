@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.utils.gyroCompass;
 import org.firstinspires.ftc.teamcode.utils.motorDeclaration;
 import org.firstinspires.ftc.teamcode.utils.turnTo;
 
-@Autonomous (name= "BlueJewelBlock", group= "competition")
+@Autonomous (name= "BlueJewelBlock", group= "testing")
 
 public class BlueJewelBLOCK extends LinearOpMode {
 

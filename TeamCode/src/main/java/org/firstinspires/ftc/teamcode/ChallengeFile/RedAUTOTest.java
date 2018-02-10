@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.utils.gyroCompass;
 import org.firstinspires.ftc.teamcode.utils.motorDeclaration;
 import org.firstinspires.ftc.teamcode.utils.turnTo;
 
-@Autonomous (name= "RedAUTOTest", group= "competition")
+@Autonomous (name= "RedAUTOTest", group= "testing")
 
 public class RedAUTOTest extends LinearOpMode {
 
