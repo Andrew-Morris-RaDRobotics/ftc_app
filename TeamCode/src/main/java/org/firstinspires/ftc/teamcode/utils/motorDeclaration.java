@@ -29,13 +29,13 @@ public class motorDeclaration {
 //        fr.setPower(-powerF + powerS);
 //        fl.setPower(powerF+powerS);
 //        br.setPower(-powerF -powerS);
-//        bl.setPower(powerF-powerS);
+//        bl.setPower(powerF-powerS);//
 //    }
     public void setP(double powerF, double powerS, double turn){
-        fr.setPower(-(-powerF + powerS+ turn));//-
-        fl.setPower(-(powerF+powerS+turn));//-
-        br.setPower(-(-powerF -powerS+turn));//+
-        bl.setPower(-(powerF-powerS+turn));//+
+        fr.setPower(-(-powerF + powerS+ turn));//+
+        fl.setPower(-(powerF+powerS+turn));//+
+        br.setPower(-(-powerF -powerS+turn));//-
+        bl.setPower(-(powerF-powerS+turn));//-
     }
 
 
