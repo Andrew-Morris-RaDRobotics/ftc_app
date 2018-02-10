@@ -186,10 +186,8 @@ public class BlueAutoCOMP extends LinearOpMode {
                     //telemetry.addData("comp:", completed);
                 }
             }
-//
-//
-//
-//
+
+
             if (completed == 2) {
                 telemetry.addData("Path0",fr.getCurrentPosition());
                 telemetry.addData("Path0",fl.getCurrentPosition());

@@ -8,8 +8,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
-import org.firstinspires.ftc.teamcode.utils.GlyphVision;
 import org.firstinspires.ftc.teamcode.utils.gyroCompass;
 import org.firstinspires.ftc.teamcode.utils.motorDeclaration;
 import org.firstinspires.ftc.teamcode.utils.turnTo;
@@ -30,7 +28,7 @@ public class RedAUTOTest extends LinearOpMode {
     public gyroCompass testGyro;
     //sElapsedTime runtime = new ElapsedTime();
     public turnTo turn;
-    public GlyphVision glyph;
+   // public GlyphVision glyph;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -49,7 +47,7 @@ public class RedAUTOTest extends LinearOpMode {
         fl.setDirection(DcMotor.Direction.REVERSE);
         bl.setDirection(DcMotor.Direction.REVERSE);
         br.setDirection(DcMotor.Direction.REVERSE);
-        glyph = new GlyphVision(hardwareMap);
+        //glyph = new GlyphVision(hardwareMap);
         testGyro = new gyroCompass(hardwareMap);
         turn = new turnTo(hardwareMap, testGyro);
         Motors = new motorDeclaration(hardwareMap);
@@ -70,8 +68,8 @@ public class RedAUTOTest extends LinearOpMode {
         double target = 0;
         waitForStart();
 
-        jewelStick.setPosition(1);
-        double completed = 0;
+       // jewelStick.setPosition(1);
+        int completed = 1;
         int color = 0; //1 is red 2 is blu (left side)
         double curr = 0.0;
         int stage = 0;
@@ -82,32 +80,24 @@ public class RedAUTOTest extends LinearOpMode {
         int Timer = 0;
          ElapsedTime     runtime = new ElapsedTime();
         runtime.reset();
-        RelicRecoveryVuMark matchGlyph = null;
-        Servo leftIntakeFlipper = hardwareMap.servo.get("leftIntakeFlipper");
-        Servo rightIntakeFlipper = hardwareMap.servo.get("rightIntakeFlipper");
+       // RelicRecoveryVuMark matchGlyph = null;
         while (opModeIsActive()) {
-            leftIntakeFlipper.setPosition(0);
-            rightIntakeFlipper.setPosition(0);
-            if (completed == 0) {
 
-                matchGlyph = glyph.getGlyph();
-
-                if (matchGlyph == RelicRecoveryVuMark.CENTER || matchGlyph == RelicRecoveryVuMark.RIGHT || matchGlyph == RelicRecoveryVuMark.LEFT ) {
-                    runtime.reset();
-                    completed++;
-                }
-                if(runtime.seconds()>5){
-                    runtime.reset();
-                    completed++;
-                }
-            }
-           telemetry.addData("glyph: ", matchGlyph);
+//            if (completed == 0) {
+//
+//                matchGlyph = glyph.getGlyph();
+//
+//                if (matchGlyph != null) {
+//                    completed++;
+//                }
+//            }
+//            telemetry.addData("glyph: ", matchGlyph);
             telemetry.addData("Completedvar", completed);
 
-            if (completed == 1.0) {
+            if (completed == 1) {
                 if (color == 0) {
 
-                    if(runtime.seconds()>8.0){
+                    if(runtime.seconds()>7.0){
                         target = 0;
                         color=3;
                     }
@@ -209,65 +199,19 @@ public class RedAUTOTest extends LinearOpMode {
 //                else{
 //                    Motors.setP(0,0,0);
 //                }
-                fr.setTargetPosition(-825);
+                fr.setTargetPosition(-900);
                 fr.setPower(0.25);
 
-                fl.setTargetPosition(825);
+                fl.setTargetPosition(900);
                 fl.setPower(0.25);
 
-                br.setTargetPosition(-825);
+                br.setTargetPosition(-900);
                 br.setPower(0.25);
 
-                bl.setTargetPosition(825);
+                bl.setTargetPosition(900);
                 bl.setPower(0.25);
                 if(runtime.seconds()>3){
-                    completed+=0.5;
-                    fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    br.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    bl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    fr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    fl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    runtime.reset();
-                }
-            }
-            if(completed==2.5){
-
-                 if(matchGlyph==RelicRecoveryVuMark.CENTER){
-                    fr.setTargetPosition(-375);
-                    fl.setTargetPosition(-375);
-                    br.setTargetPosition(375);
-                    bl.setTargetPosition(375);
-                }
-               else if(matchGlyph==RelicRecoveryVuMark.LEFT){
-                    fr.setTargetPosition(-520);
-                    fl.setTargetPosition(-520);
-                    br.setTargetPosition(520);
-                    bl.setTargetPosition(520);
-                }
-                else {
-                    fr.setTargetPosition(-240);
-                    fl.setTargetPosition(-240);
-                    br.setTargetPosition(240);
-                    bl.setTargetPosition(240);
-                }
-                fr.setPower(0.2);
-                fl.setPower(0.2);
-                br.setPower(0.2);
-                bl.setPower(0.2);
-
-                if(runtime.seconds()>3){
-                    completed+=0.5;
-//                    fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//                    bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//                    fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//                    br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//                    br.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                    bl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                    fr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                    fl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    completed++;
                     runtime.reset();
                 }
             }
@@ -287,16 +231,16 @@ public class RedAUTOTest extends LinearOpMode {
                 }
             }
             if(completed==4){
-                fr.setTargetPosition(100);
+                fr.setTargetPosition(200);
                 fr.setPower(0.25);
 
-                fl.setTargetPosition(-100);
+                fl.setTargetPosition(-200);
                 fl.setPower(0.25);
 
-                br.setTargetPosition(100);
+                br.setTargetPosition(200);
                 br.setPower(0.25);
 
-                bl.setTargetPosition(-100);
+                bl.setTargetPosition(-200);
                 bl.setPower(0.25);
                 if(runtime.seconds()>3){
                     completed++;
@@ -339,28 +283,28 @@ public class RedAUTOTest extends LinearOpMode {
 
             }
             if(completed==6){
-                fr.setTargetPosition(80);
+                fr.setTargetPosition(100);
                 fr.setPower(0.25);
 
-                fl.setTargetPosition(-80);
+                fl.setTargetPosition(-100);
                 fl.setPower(0.25);
 
-                br.setTargetPosition(80);
+                br.setTargetPosition(100);
                 br.setPower(0.25);
 
-                bl.setTargetPosition(-80);
+                bl.setTargetPosition(-100);
                 bl.setPower(0.25);
                 if(runtime.seconds()>3){
                     completed++;
                     runtime.reset();
-//                    fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//                    bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//                    fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//                    br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//                    br.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                    bl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                    fr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                    fl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    br.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    bl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    fr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    fl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 }
 
             }
