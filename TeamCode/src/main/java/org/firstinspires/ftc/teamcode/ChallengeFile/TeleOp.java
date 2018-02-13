@@ -1,9 +1,7 @@
 package org.firstinspires.ftc.teamcode.ChallengeFile;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.utils.drive_at_angle_psudo;
@@ -49,11 +47,7 @@ public class TeleOp extends OpMode {
     double i;
     double p;
     double intake;
-    double cryptobox1 = 0;
-    double cryptobox2 = 0;
-    double cryptobox3 = 0;
 //    double ratio = glyphColor.blue() / glyphColor.red();
-    boolean glyphLoaded = false;
     boolean align = true;
     boolean pressAlign = false;
     boolean lock =false;
@@ -150,10 +144,6 @@ public class TeleOp extends OpMode {
             }
             double magnitude = Math.sqrt(Math.pow(x2, 2) + Math.pow(y2, 2));
             telemetry.addData("gyro", testGyro.getHeading());
-//        if(((Math.abs(x)>.08)||(Math.abs(y)>.08))){
-//                turn.turnT(angle, p, i, 0.0, 1);
-//            dontDoIt=true;
-//            }
 
             if (((Math.abs(x2) > .08) || (Math.abs(y2) > .08))) {
                 thing.angle(angle2 - (-1 * testGyro.getHeading()), magnitude * speed, -1 * gamepad1.right_stick_x * (speed + .03));
@@ -170,7 +160,6 @@ public class TeleOp extends OpMode {
             double flSpeed = (speed) * (+gamepad1.left_stick_y - gamepad1.left_stick_x - gamepad1.right_stick_x);
             double brSpeed = (speed) * (-gamepad1.left_stick_y + gamepad1.left_stick_x - gamepad1.right_stick_x);
             double blSpeed = (speed) * (+gamepad1.left_stick_y + gamepad1.left_stick_x - gamepad1.right_stick_x);
-            //if(offBalance&&balanceEnabled) {
             fr.setPower(frSpeed);
             fl.setPower(flSpeed);
             br.setPower(brSpeed);
@@ -188,10 +177,9 @@ public class TeleOp extends OpMode {
             double pitch = -1 * testGyro.getPitch();
             double roll = -1 * (testGyro.getRoll());
 
-            double asdf = testGyro.getHeading();
             telemetry.addData("roll", roll);
             telemetry.addData("pitch", pitch);
-            telemetry.addData("heading", asdf);
+            //telemetry.addData("heading", asdf);
 
             if ((roll > 2) || (roll < -2) || (pitch > 2) || (pitch < -2)) {
 
@@ -227,16 +215,6 @@ public class TeleOp extends OpMode {
 
         if (gamepad2.dpad_down) {
             conveyorP = 1;
-//            if (column1<4) {
-//                leftSorter.setPosition(1);
-//                rightSorter.setPosition(0.5);
-//            } else if (column2<4) {
-//                leftSorter.setPosition(0.5);
-//                rightSorter.setPosition(0.5);
-//            } else if (column3<4) {
-//                leftSorter.setPosition(0.5);
-//                rightSorter.setPosition(1);
-//            }
         } else if (gamepad2.dpad_up) {
             conveyorP = -1;
         } else if (gamepad2.dpad_left || gamepad2.dpad_right) {
@@ -251,54 +229,10 @@ public class TeleOp extends OpMode {
             conveyor.setPower(0);
         }
 
-//        if (gamepad1.left_bumper) {
-//            leftSorter.setPosition(1);
-//            rightSorter.setPosition(0.5);
-//        } else if (gamepad1.right_bumper) {
-//            leftSorter.setPosition(0.5);
-//            rightSorter.setPosition(1);
-//        } else {
-//            leftSorter.setPosition(0.5);
-//            rightSorter.setPosition(0.5);
-//        }
-
-        //floppers
-        double intake = speed2 * -gamepad2.left_stick_y;
-        double inverseIntake = speed2 * gamepad2.left_stick_y;
-//        if (gamepad2.a) {
-//            intakeDrive.setPower(intake);
-//        } else if (gamepad2.x) {
-//            intakeDrive.setPower(inverseIntake);
-//        } else {
-//            intakeDrive.setPower(0);
-//        }
+        //intake wheel
         intakeDrive.setPower(gamepad2.left_stick_y * (speed2 + .3));
-//
-//        intake--;
-//        if (Math.abs(gamepad2.left_stick_y) > .05 && intake < 0) {
-//            intake = 3;
-//        } else if (Math.abs(gamepad2.left_stick_y) > .05 && intake < 3) {
-//            intake = 2;
-//        }
-//
-//        if (intake == 3) {
-//            intakeDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//            intakeDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-//        } else if (intake == 2) {
-//
-//        } else if (intake == 1) {
-//            intakeDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//            intakeDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            intakeDrive.setTargetPosition(0);
-//        } else {
-//            telemetry.addData("posintake",intakeDrive.getCurrentPosition());
-//            if (Math.abs(intakeDrive.getCurrentPosition()) > .3) {
-//                intakeDrive.setPower(.3);
-//            }
-//            else{
-//                intakeDrive.setPower(0);
-//            }
-//        }
+
+        //agliner/pusher toggle
         if(gamepad1.x&&!pressAlign){
             if (align) {
                 align = false;
@@ -318,6 +252,7 @@ public class TeleOp extends OpMode {
             conveyerTop.setPosition(1);
         }
 
+        //floppers
         if (gamepad1.left_bumper) {
             fwopperDrive.setPower(1);
         } else if (gamepad1.right_bumper) {
@@ -330,6 +265,8 @@ public class TeleOp extends OpMode {
         } else {
             fwopperDrive.setPower(0);
         }
+
+        //intake linear servos
         position = position + (gamepad2.right_stick_y * .1);
         if (position < 0) {
             position = 0;
@@ -340,48 +277,17 @@ public class TeleOp extends OpMode {
         leftIntakeFlipper.setPosition(position);
         rightIntakeFlipper.setPosition(position);
 
-//        if(gamepad2.x) {
-//            if (xComp == 0) {
-//                fwopperDrive.setPower(1);
-//                xComp++;
-//            }
-//            else if (xComp < 6) {
-//                intakeBucket.setPosition(0);
-//                xComp++;
-//
-//            }
-//            else if (xComp < 12 && xComp > 5) {
-//                conveyor.setPower(0.3);
-//                intakeBucket.setPosition(1);
-//                xComp++;
-//           }
-//            else {
-//                conveyor.setPower(0);
-//                xComp = 0;
-//            }
-//
-//        }
-
-        telemetry.addData("pos", position);
-//        if (gamepad2.left_trigger<.05) {
-//            intakeBucket.setPosition(.62 - (gamepad2.left_trigger * .55));
-//        }
-//        else {
-//           intakeBucket.setPosition(.5);
-//        }
-
-        telemetry.addData("Gamepad1", gamepad1.left_trigger);
-        telemetry.addData("Gamepad2", gamepad2.left_trigger);
-
-
+        //intake bucket
         if(gamepad1.left_trigger<.05) {
             intakeBucket.setPosition(.62 - (gamepad2.left_trigger * .61));
         }
         else {
             intakeBucket.setPosition(.62 - (gamepad1.left_trigger * .61));
         }
-
+        //control jewel arm
         jewelStick.setPosition(.5);
+
+        //lock drivetrain in place
         if(Driving){
             lock=false;
         }
@@ -422,7 +328,7 @@ public class TeleOp extends OpMode {
                 bl.setPower(1);
                 fr.setPower(1);
                 fl.setPower(1);
-telemetry.addData("settin powe","r");
+                telemetry.addData("settin powe","r");
 
             }
         }
@@ -434,8 +340,6 @@ telemetry.addData("settin powe","r");
             telemetry.addData("runwoencoder","aw");
         }
         telemetry.update();
-        // double pitch = testGyro.getPitch();
-        // double roll = -1 * (testGyro.getRoll());
 
     }
 }
