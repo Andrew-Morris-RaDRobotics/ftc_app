@@ -12,9 +12,9 @@ import org.firstinspires.ftc.teamcode.utils.gyroCompass;
 import org.firstinspires.ftc.teamcode.utils.motorDeclaration;
 import org.firstinspires.ftc.teamcode.utils.turnTo;
 
-@Autonomous (name= "RedAutoComp", group= "competition")
+@Autonomous (name= "BlueAutoCompv3", group= "competition")
 
-public class RedAutoCOMP extends LinearOpMode {
+public class BlueAutoCOMPV3 extends LinearOpMode {
 
     public Servo jewelStick;
     public Servo conveyorTop;
@@ -107,8 +107,18 @@ public DcMotor conveyor;
 
             if (completed == 1) {
                 if (color == 0) {
-
-                        jewelStick.setPosition(.27);
+                        if(runtime.seconds()<4) {
+                            jewelStick.setPosition(.29);
+                        }
+                        else if(runtime.seconds()<5){
+                            jewelStick.setPosition(.3);
+                        }
+                        else if(runtime.seconds()<6){
+                            jewelStick.setPosition(.28);
+                        }
+                        else if(runtime.seconds()<7){
+                            jewelStick.setPosition(.275);
+                        }
 
 //                    if(runtime.seconds()<1){
 //                        intakeBucket.setPosition(.7);
@@ -128,21 +138,20 @@ public DcMotor conveyor;
                         target = 0;
                         color = 3;
                     }
-                    else if (leftJewel.red() - 2 > rightJewel.red() && rightJewel.blue() - 1 > leftJewel.blue()&& runtime.seconds()>2) {
+                    else if (leftJewel.red() - 1 > rightJewel.red() && rightJewel.blue() - 1 > leftJewel.blue()&& runtime.seconds()>2) {
                         telemetry.addData("left side is red", "right side is blue");
                         color = 2;
                         curr = testGyro.getHeading();
-                        target = 20;
+                        target = -20;
                         // sleep(1000);
-                    } else if (leftJewel.red() + 2 < rightJewel.red() && rightJewel.blue() + 191 < leftJewel.blue()&& runtime.seconds()>2) {
+                    } else if (leftJewel.red() + 1 < rightJewel.red() && rightJewel.blue() + 1 < leftJewel.blue()&& runtime.seconds()>2) {
                         telemetry.addData("right side is red", "left side is blue");
                         color = 1;
                         curr = testGyro.getHeading();
-                        target = -20;
+                        target = 20;
                         //sleep(1000);
 
-                    }
-                    else {
+                    } else {
                         telemetry.addData("No reading", "");
                     }
 
@@ -223,16 +232,16 @@ public DcMotor conveyor;
 //                else{
 //                    Motors.setP(0,0,0);
 //                }
-                fr.setTargetPosition(1000);
+                fr.setTargetPosition(-1000);
                 fr.setPower(0.2);
 
-                fl.setTargetPosition(-1000);
+                fl.setTargetPosition(1000);
                 fl.setPower(0.2);
 
-                br.setTargetPosition(1000);
+                br.setTargetPosition(-1000);
                 br.setPower(0.2);
 
-                bl.setTargetPosition(-1000);
+                bl.setTargetPosition(1000);
                 bl.setPower(0.2);
                 if(runtime.seconds()>3){
                     //completed++;

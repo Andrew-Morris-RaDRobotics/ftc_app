@@ -128,13 +128,13 @@ public DcMotor conveyor;
                         target = 0;
                         color = 3;
                     }
-                    else if (leftJewel.red() - 2 > rightJewel.red() && rightJewel.blue() - 1 > leftJewel.blue()&& runtime.seconds()>2) {
+                    else if (leftJewel.red() - 1 > rightJewel.red() && rightJewel.blue() - 1 > leftJewel.blue()&& runtime.seconds()>2) {
                         telemetry.addData("left side is red", "right side is blue");
                         color = 2;
                         curr = testGyro.getHeading();
                         target = -20;
                         // sleep(1000);
-                    } else if (leftJewel.red() + 2 < rightJewel.red() && rightJewel.blue() + 1 < leftJewel.blue()&& runtime.seconds()>2) {
+                    } else if (leftJewel.red() + 1 < rightJewel.red() && rightJewel.blue() + 1 < leftJewel.blue()&& runtime.seconds()>2) {
                         telemetry.addData("right side is red", "left side is blue");
                         color = 1;
                         curr = testGyro.getHeading();
