@@ -12,7 +12,7 @@ import static java.lang.Thread.sleep;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "TeleOp", group = "ChallengeFile")
 public class TeleOp extends OpMode {
-
+//Declaration
     public DcMotor stanley;
 
     public DcMotor fl;
@@ -23,7 +23,7 @@ public class TeleOp extends OpMode {
     Servo rightIntakeFlipper;
     Servo conveyerTop;
     DcMotor intakeDrive;
-    DcMotor fwopperDrive;
+    DcMotor fwoppers;
     DcMotor conveyor;
     gyroCompass testGyro;
     drive_at_angle_psudo thing;
@@ -54,6 +54,7 @@ public class TeleOp extends OpMode {
 
     @Override
     public void init() {
+//initiation
         intake = 0;
         jewelStick = hardwareMap.servo.get("jewelStick");
         fr = hardwareMap.dcMotor.get("fr");
@@ -74,7 +75,7 @@ public class TeleOp extends OpMode {
         intakeDrive = hardwareMap.dcMotor.get("intakeDrive");
         intakeDrive.setDirection(DcMotor.Direction.REVERSE);
 
-        fwopperDrive = hardwareMap.dcMotor.get("fwopperDrive");
+        fwoppers = hardwareMap.dcMotor.get("fwopperDrive");
         conveyor = hardwareMap.dcMotor.get("conveyer");
 
         testGyro = new gyroCompass(hardwareMap);
@@ -85,7 +86,7 @@ public class TeleOp extends OpMode {
 
     @Override
     public void loop() {
-
+//gyro code
         if (gamepad1.start && !gyroReset && !gamepad1.a && !gamepad1.b) {
             gyroReset = true;
             testGyro.reset();
@@ -126,6 +127,7 @@ public class TeleOp extends OpMode {
         }
 
         //System.out.println(gamepad1.right_bumper);
+//Field Centric Code
         if (!omnidrive && Driving) {
             double x2 = gamepad1.left_stick_x;
             double y2 = -1 * gamepad1.left_stick_y;
@@ -149,6 +151,7 @@ public class TeleOp extends OpMode {
                 thing.angle(angle2 - (-1 * testGyro.getHeading()), magnitude * speed, -1 * gamepad1.right_stick_x * (speed + .03));
                 telemetry.addData("angle", angle2);
                 telemetry.addData("target angle", angle2 - (-1 * testGyro.getHeading()));
+//Driving
             } else if (Math.abs(gamepad1.right_stick_x) > .05) {
                 fr.setPower(-1 * gamepad1.right_stick_x * speed);
                 fl.setPower(-1 * gamepad1.right_stick_x * speed);
@@ -164,6 +167,7 @@ public class TeleOp extends OpMode {
             fl.setPower(flSpeed);
             br.setPower(brSpeed);
             bl.setPower(blSpeed);
+//Turn To Position
         } else if (gamepad1.dpad_up) {
             telemetry.addData("i", turn.turnT(0, 0.0052, 0.002, 0.0, 1));
         } else if (gamepad1.dpad_down) {
@@ -172,6 +176,7 @@ public class TeleOp extends OpMode {
             telemetry.addData("i", turn.turnT(-90, 0.0052, 0.002, 0.0, 1));
         } else if (gamepad1.dpad_left) {
             telemetry.addData("i", turn.turnT(90, 0.0052, 0.002, 0.0, 1));
+//Balancing
         } else if (!Driving && balanceEnabled) {
             turn.reset();
             double pitch = -1 * testGyro.getPitch();
@@ -212,7 +217,7 @@ public class TeleOp extends OpMode {
         }
 
         //other stuff thats not drive
-
+//conveyer
         if (gamepad2.dpad_down) {
             conveyorP = 1;
         } else if (gamepad2.dpad_up) {
@@ -252,18 +257,18 @@ public class TeleOp extends OpMode {
             conveyerTop.setPosition(1);
         }
 
-        //floppers
+        //fWoppers
         if (gamepad1.left_bumper) {
-            fwopperDrive.setPower(1);
+            fwoppers.setPower(1);
         } else if (gamepad1.right_bumper) {
-            fwopperDrive.setPower(-1);
+            fwoppers.setPower(-1);
         }
         else if (gamepad2.left_bumper) {
-            fwopperDrive.setPower(1);
+            fwoppers.setPower(1);
         } else if (gamepad2.right_bumper) {
-            fwopperDrive.setPower(-1);
+            fwoppers.setPower(-1);
         } else {
-            fwopperDrive.setPower(0);
+            fwoppers.setPower(0);
         }
 
         //intake linear servos
@@ -285,7 +290,12 @@ public class TeleOp extends OpMode {
             intakeBucket.setPosition(.62 - (gamepad1.left_trigger * .61));
         }
         //control jewel arm
-        jewelStick.setPosition(.5);
+        if (gamepad1.left_bumper) {
+            jewelStick.setPosition(1);
+        } else {
+            jewelStick.setPosition(.5);
+
+        }
 
         //lock drivetrain in place
         if(Driving){

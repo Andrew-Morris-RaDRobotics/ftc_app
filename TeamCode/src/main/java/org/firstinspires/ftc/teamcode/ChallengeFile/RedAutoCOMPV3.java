@@ -26,11 +26,10 @@ public class RedAutoCOMPV3 extends LinearOpMode {
     public DcMotor fr;
     public DcMotor br;
     public DcMotor bl;
-    public DcMotor FwopperDrive;
+    public DcMotor fwoppers;
     public DcMotor intakeDrive;
     public motorDeclaration Motors;
     public gyroCompass testGyro;
-    public DcMotor fwopperDrive;
 public DcMotor conveyor;
     public Servo intakeBucket;
 
@@ -41,7 +40,7 @@ public DcMotor conveyor;
     public void runOpMode() throws InterruptedException {
         intakeDrive = hardwareMap.dcMotor.get("intakeDrive");
 
-        
+        double autoTime = 0;
         double COUNTS_PER_MOTOR_REV = 1440;    // eg: TETRIX Motor Encoder
         double DRIVE_GEAR_REDUCTION = 2.0;     // This is < 1.0 if geared UP
         double WHEEL_DIAMETER_INCHES = 4.0;     // For figuring circumference
@@ -73,9 +72,8 @@ public DcMotor conveyor;
         jewelStick = hardwareMap.servo.get("jewelStick");
         leftJewel = hardwareMap.colorSensor.get("leftJewel");
         rightJewel = hardwareMap.colorSensor.get("rightJewel");
-        fwopperDrive = hardwareMap.dcMotor.get("fwopperDrive");
+        fwoppers = hardwareMap.dcMotor.get("fwopperDrive");
         intakeBucket = hardwareMap.servo.get("intakeBucket");
-        fwopperDrive = hardwareMap.dcMotor.get("fwopperDrive");
         leftIntakeFlipper = hardwareMap.servo.get("leftIntakeFlipper");
         rightIntakeFlipper = hardwareMap.servo.get("rightIntakeFlipper");
 
@@ -109,7 +107,7 @@ public DcMotor conveyor;
 //            }
 //            telemetry.addData("glyph: ", matchGlyph);
             telemetry.addData("Completedvar", completed);
-
+          }
             if (completed == 1) {
                 if (color == 0) {
                     if(runtime.seconds()<4) {
@@ -444,7 +442,7 @@ telemetry.addData("yeet","we won");
                 fl.setPower(1);
                 fr.setPower(1);
                 intakeDrive.setPower(.8);
-                fwopperDrive.setPower(1);
+                fwoppers.setPower(1);
                 if(runtime.seconds()>2){
                     runtime.reset();
                     completed++;
@@ -457,7 +455,7 @@ telemetry.addData("yeet","we won");
                 fl.setPower(1);
                 fr.setPower(1);
                 intakeDrive.setPower(-.8);
-                fwopperDrive.setPower(1);
+                fwoppers.setPower(1);
                 if(runtime.seconds()>1.5){
                     runtime.reset();
                     completed++;
@@ -469,7 +467,7 @@ telemetry.addData("yeet","we won");
                 fl.setPower(1);
                 fr.setPower(1);
                 intakeDrive.setPower(0);
-                fwopperDrive.setPower(1);
+                fwoppers.setPower(1);
                 intakeBucket.setPosition(0);
                 conveyor.setPower(-.45);
                 if(runtime.seconds()>.8){
@@ -483,15 +481,22 @@ telemetry.addData("yeet","we won");
 //                fl.setPower(1);
 //                fr.setPower(1);
                 intakeDrive.setPower(0);
-                fwopperDrive.setPower(1);
+                fwoppers.setPower(1);
                 intakeBucket.setPosition(0);
                 if(runtime.seconds()>.8){
                     runtime.reset();
                     completed++;
                 }
             }
-
+/**/        if(completed==12) {
+                fl.setTargetPosition(-200);
+                fr.setTargetPosition(200);
+                bl.setTargetPosition(-200);
+                br.setTargetPosition(200);
+                completed++;
+            }
+/**/
             telemetry.update();
-        }
+        
     }
 }
