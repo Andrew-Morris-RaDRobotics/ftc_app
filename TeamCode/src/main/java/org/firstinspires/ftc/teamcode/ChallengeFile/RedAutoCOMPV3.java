@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -34,6 +35,8 @@ public class RedAutoCOMPV3 extends LinearOpMode {
     public gyroCompass testGyro;
     public DcMotor conveyor;
     public Servo intakeBucket;
+    public ColorSensor glyphColor;
+    public DistanceSensor glyphDistance;
 
     public turnTo turn;
 
@@ -74,6 +77,8 @@ public class RedAutoCOMPV3 extends LinearOpMode {
         intakeBucket = hardwareMap.servo.get("intakeBucket");
         leftIntakeFlipper = hardwareMap.servo.get("leftIntakeFlipper");
         rightIntakeFlipper = hardwareMap.servo.get("rightIntakeFlipper");
+        glyphColor= hardwareMap.colorSensor.get("glyphColor");
+        glyphDistance=hardwareMap.get(DistanceSensor.class,"glyphColor");
 
         int newLeftTarget = 0;
         int newRightTarget = 0;
@@ -97,6 +102,8 @@ public class RedAutoCOMPV3 extends LinearOpMode {
         totalTime.reset();
         runtime.reset();
         RelicRecoveryVuMark matchGlyph = null;
+
+        int flPosition=0;
 
         telemetry.update();
         while (opModeIsActive()) {
@@ -142,16 +149,24 @@ public class RedAutoCOMPV3 extends LinearOpMode {
 //                        intakeBucket.setPosition(.3);
 //                    }
 
+                    int leftRed=leftJewel.red();
+                    int leftBlue=leftJewel.blue();
+                    int leftGreen=leftJewel.green();
+
+                    int rightRed=rightJewel.red();
+                    int rightBlue=rightJewel.blue();
+                    int rightGreen=rightJewel.green();
+
                     if (runtime.seconds() > 4.5) {
                         target = 0;
                         color = 3;
-                    } else if (leftJewel.red() - 1 > rightJewel.red() && rightJewel.blue() - 1 > leftJewel.blue() && runtime.seconds() > .5) {
+                    } else if (leftBlue/leftGreen>0.74 && leftBlue/leftGreen<0.81 && rightRed/rightGreen>0.4 && rightRed/rightGreen<0.45) {
                         telemetry.addData("left side is red", "right side is blue");
                         color = 2;
                         curr = testGyro.getHeading();
                         target = 16;
                         // sleep(1000);
-                    } else if (leftJewel.red() + 1 < rightJewel.red() && rightJewel.blue() + 1 < leftJewel.blue() && runtime.seconds() > .5) {
+                    } else if (rightBlue/rightGreen>0.74 && rightBlue/rightGreen<0.81 && leftRed/leftGreen>0.4 && leftRed/leftGreen<0.45) {
                         telemetry.addData("right side is red", "left side is blue");
                         color = 1;
                         curr = testGyro.getHeading();
@@ -229,6 +244,7 @@ public class RedAutoCOMPV3 extends LinearOpMode {
 //
 //
             if (completed == 2) {
+                flPosition=fl.getCurrentPosition();
                 telemetry.addData("Path0", fr.getCurrentPosition());
                 telemetry.addData("Path0", fl.getCurrentPosition());
                 telemetry.addData("Path0", br.getCurrentPosition());
@@ -255,7 +271,7 @@ public class RedAutoCOMPV3 extends LinearOpMode {
                 fl.setPower(0.2);
                 br.setPower(0.2);
                 bl.setPower(0.2);
-                if (runtime.seconds() > 3) {
+                if (fl.getCurrentPosition()<flPosition || runtime.time()>3) {
                     completed++;
                     runtime.reset();
                     telemetry.addData("yeet", "we won");
@@ -267,7 +283,6 @@ public class RedAutoCOMPV3 extends LinearOpMode {
             }
 
             if (completed == 3) {
-
                 isComplete = turn.turnT(90, 0.009, 0.0003, 0.0, .5);
                 telemetry.addData("i", isComplete);
                 if (isComplete == 0 || runtime.seconds() > 3) {
@@ -292,6 +307,7 @@ public class RedAutoCOMPV3 extends LinearOpMode {
                 }
             }
             if (completed == 4) {
+                flPosition=fl.getCurrentPosition();
 
                 fr.setTargetPosition(400);
                 fr.setPower(0.2);
@@ -304,7 +320,7 @@ public class RedAutoCOMPV3 extends LinearOpMode {
 
                 bl.setTargetPosition(-400);
                 bl.setPower(0.2);
-                if (runtime.seconds() > 2) {
+                if (runtime.seconds() > 2 || flPosition<fl.getCurrentPosition()) {
                     completed++;
                     runtime.reset();
                 }
@@ -314,7 +330,7 @@ public class RedAutoCOMPV3 extends LinearOpMode {
                 telemetry.addData("flippin it", "flipity dip");
                 conveyor.setPower(-1);
                 conveyor.setPower(-1);
-intakeBucket.setPosition(.62);
+                intakeBucket.setPosition(.62);
                 if (runtime.seconds() > 1.6) {
 
                     runtime.reset();
@@ -437,6 +453,7 @@ intakeBucket.setPosition(.62);
                 }
             }
             if (completed == 8) {
+
                 leftIntakeFlipper.setPosition(1);
                 rightIntakeFlipper.setPosition(1);
                 intakeBucket.setPosition(.62);
