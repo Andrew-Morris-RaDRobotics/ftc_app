@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
+import org.firstinspires.ftc.teamcode.utils.GlyphVision;
 import org.firstinspires.ftc.teamcode.utils.gyroCompass;
 import org.firstinspires.ftc.teamcode.utils.motorDeclaration;
 import org.firstinspires.ftc.teamcode.utils.turnTo;
@@ -15,7 +17,7 @@ import org.firstinspires.ftc.teamcode.utils.turnTo;
 @Autonomous (name= "RedAutoCompV3", group= "competition")
 
 public class RedAutoCOMPV3 extends LinearOpMode {
-
+    public GlyphVision glyph;
     public Servo jewelStick;
     public Servo leftIntakeFlipper;
     public Servo rightIntakeFlipper;
@@ -30,7 +32,7 @@ public class RedAutoCOMPV3 extends LinearOpMode {
     public DcMotor intakeDrive;
     public motorDeclaration Motors;
     public gyroCompass testGyro;
-public DcMotor conveyor;
+    public DcMotor conveyor;
     public Servo intakeBucket;
 
     public turnTo turn;
@@ -56,17 +58,13 @@ public DcMotor conveyor;
         fl.setDirection(DcMotor.Direction.REVERSE);
         bl.setDirection(DcMotor.Direction.REVERSE);
         br.setDirection(DcMotor.Direction.REVERSE);
-        //glyph = new GlyphVision(hardwareMap);
+        glyph = new GlyphVision(hardwareMap);
         testGyro = new gyroCompass(hardwareMap);
         turn = new turnTo(hardwareMap, testGyro);
         Motors = new motorDeclaration(hardwareMap);
 
         fr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         bl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        telemetry.addData("Path0", "Starting at %7d :%7d",
-                fr.getCurrentPosition(),
-                bl.getCurrentPosition());
-        telemetry.update();
 
 
         jewelStick = hardwareMap.servo.get("jewelStick");
@@ -80,10 +78,12 @@ public DcMotor conveyor;
         int newLeftTarget = 0;
         int newRightTarget = 0;
         double target = 0;
+
+
         waitForStart();
 
 
-        double completed = 1;
+        double completed = 0;
         int color = 0; //1 is red 2 is blu (left side)
         double curr = 0.0;
         int stage = 0;
@@ -92,37 +92,41 @@ public DcMotor conveyor;
         double i = .0003;
         int updatin = 0;
         int Timer = 0;
-        ElapsedTime     runtime = new ElapsedTime();
+        ElapsedTime runtime = new ElapsedTime();
+        ElapsedTime totalTime = new ElapsedTime();
+        totalTime.reset();
         runtime.reset();
-       // RelicRecoveryVuMark matchGlyph = null;
+        RelicRecoveryVuMark matchGlyph = null;
+
+        telemetry.update();
         while (opModeIsActive()) {
 
-//            if (completed == 0) {
-//
-//                matchGlyph = glyph.getGlyph();
-//
-//                if (matchGlyph != null) {
-//                    completed++;
-//                }
-//            }
-//            telemetry.addData("glyph: ", matchGlyph);
             telemetry.addData("Completedvar", completed);
-          }
+            telemetry.addData("heading: ",testGyro.getHeading());
+            if (completed == 0) {
+
+                matchGlyph = glyph.getGlyph();
+
+                if (matchGlyph != null || runtime.seconds() > 1.2) {
+                    completed++;
+                    runtime.reset();
+                }
+            }
+            telemetry.addData("glyph: ", matchGlyph);
+
+
             if (completed == 1) {
                 if (color == 0) {
-                    if(runtime.seconds()<4) {
+                    if (runtime.seconds() < 1) {
                         jewelStick.setPosition(.29);
-                    }
-                    else if(runtime.seconds()<5){
+                    } else if (runtime.seconds() < 2) {
                         jewelStick.setPosition(.3);
-                    }
-                    else if(runtime.seconds()<6){
+                    } else if (runtime.seconds() < 3) {
                         jewelStick.setPosition(.28);
-                    }
-                    else if(runtime.seconds()<7){
+                    } else if (runtime.seconds() < 4) {
                         jewelStick.setPosition(.275);
                     }
-                        //jewelStick.setPosition(.27);
+                    //jewelStick.setPosition(.27);
 
 //                    if(runtime.seconds()<1){
 //                        intakeBucket.setPosition(.7);
@@ -138,25 +142,23 @@ public DcMotor conveyor;
 //                        intakeBucket.setPosition(.3);
 //                    }
 
-                    if(runtime.seconds()>7.0) {
+                    if (runtime.seconds() > 4.5) {
                         target = 0;
                         color = 3;
-                    }
-                    else if (leftJewel.red() - 1 > rightJewel.red() && rightJewel.blue() - 1 > leftJewel.blue()&& runtime.seconds()>.5) {
+                    } else if (leftJewel.red() - 1 > rightJewel.red() && rightJewel.blue() - 1 > leftJewel.blue() && runtime.seconds() > .5) {
                         telemetry.addData("left side is red", "right side is blue");
                         color = 2;
                         curr = testGyro.getHeading();
-                        target = 20;
+                        target = 16;
                         // sleep(1000);
-                    } else if (leftJewel.red() + 1 < rightJewel.red() && rightJewel.blue() + 1 < leftJewel.blue()&& runtime.seconds()>.5) {
+                    } else if (leftJewel.red() + 1 < rightJewel.red() && rightJewel.blue() + 1 < leftJewel.blue() && runtime.seconds() > .5) {
                         telemetry.addData("right side is red", "left side is blue");
                         color = 1;
                         curr = testGyro.getHeading();
-                        target = -20;
+                        target = -16;
                         //sleep(1000);
 
-                    }
-                    else {
+                    } else {
                         telemetry.addData("No reading", "");
                     }
 
@@ -196,7 +198,7 @@ public DcMotor conveyor;
                     }
                     if (stage == 1) {
                         telemetry.addData("turning to 0", "ye");
-                        isComplete = turn.turnT(0, 0.0075, .0003, 0.0, 1);
+                        isComplete = turn.turnT(0, 0.007, .0003, 0.0, .5);
 
                         // completed++;
                     }
@@ -227,31 +229,36 @@ public DcMotor conveyor;
 //
 //
             if (completed == 2) {
-                telemetry.addData("Path0",fr.getCurrentPosition());
-                telemetry.addData("Path0",fl.getCurrentPosition());
-                telemetry.addData("Path0",br.getCurrentPosition());
-                telemetry.addData("Path0",bl.getCurrentPosition());
-//                if (fr.getCurrentPosition() < 1000) {
-//                    Motors.setP(-.2, 0, 0);
-//                }
-//                else{
-//                    Motors.setP(0,0,0);
-//                }
-                fr.setTargetPosition(950);
+                telemetry.addData("Path0", fr.getCurrentPosition());
+                telemetry.addData("Path0", fl.getCurrentPosition());
+                telemetry.addData("Path0", br.getCurrentPosition());
+                telemetry.addData("Path0", bl.getCurrentPosition());
+
+                if (matchGlyph == RelicRecoveryVuMark.RIGHT) {
+                    fr.setTargetPosition(875);
+                    bl.setTargetPosition(-875);
+                    fl.setTargetPosition(-875);
+                    br.setTargetPosition(875);
+                } else if (matchGlyph == RelicRecoveryVuMark.LEFT) {
+                    fr.setTargetPosition(1025);
+                    bl.setTargetPosition(-1025);
+                    fl.setTargetPosition(-1025);
+                    br.setTargetPosition(1025);
+                } else {
+                    fr.setTargetPosition(950);
+                    bl.setTargetPosition(-950);
+                    fl.setTargetPosition(-950);
+                    br.setTargetPosition(950);
+                }
+
                 fr.setPower(0.2);
-
-                fl.setTargetPosition(-950);
                 fl.setPower(0.2);
-
-                br.setTargetPosition(950);
                 br.setPower(0.2);
-
-                bl.setTargetPosition(-950);
                 bl.setPower(0.2);
-                if(runtime.seconds()>3){
+                if (runtime.seconds() > 3) {
                     completed++;
                     runtime.reset();
-telemetry.addData("yeet","we won");
+                    telemetry.addData("yeet", "we won");
                     br.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                     bl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                     fr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -259,11 +266,11 @@ telemetry.addData("yeet","we won");
                 }
             }
 
-            if(completed==3){
+            if (completed == 3) {
 
-                isComplete = turn.turnT(90, 0.008, 0.0004, 0.0, 3);
+                isComplete = turn.turnT(90, 0.009, 0.0003, 0.0, .5);
                 telemetry.addData("i", isComplete);
-                if(isComplete==0 || runtime.seconds()>3){
+                if (isComplete == 0 || runtime.seconds() > 3) {
                     completed++;
                     br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                     bl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -284,7 +291,7 @@ telemetry.addData("yeet","we won");
                     runtime.reset();
                 }
             }
-            if(completed==4){
+            if (completed == 4) {
 
                 fr.setTargetPosition(400);
                 fr.setPower(0.2);
@@ -297,18 +304,18 @@ telemetry.addData("yeet","we won");
 
                 bl.setTargetPosition(-400);
                 bl.setPower(0.2);
-                if(runtime.seconds()>3){
+                if (runtime.seconds() > 2) {
                     completed++;
                     runtime.reset();
                 }
 
             }
-            if(completed==5){
-                telemetry.addData("flippin it","flipity dip");
+            if (completed == 5) {
+                telemetry.addData("flippin it", "flipity dip");
                 conveyor.setPower(-1);
                 conveyor.setPower(-1);
-
-                if(runtime.seconds()>2){
+intakeBucket.setPosition(.62);
+                if (runtime.seconds() > 1.6) {
 
                     runtime.reset();
                     completed++;
@@ -324,7 +331,7 @@ telemetry.addData("yeet","we won");
                 }
             }
 
-            if(completed==6){
+            if (completed == 6) {
                 conveyorTop.setPosition(1);
                 fr.setTargetPosition(-420);
 
@@ -336,20 +343,19 @@ telemetry.addData("yeet","we won");
 
 
                 bl.setTargetPosition(420);
-                if(runtime.seconds()>.5) {
+                if (runtime.seconds() > .5) {
                     fl.setPower(0.2);
                     br.setPower(0.2);
                     fr.setPower(0.2);
                     bl.setPower(0.2);
-                }
-                else{
+                } else {
                     fl.setPower(0);
                     br.setPower(0);
                     fr.setPower(0);
                     bl.setPower(0);
                 }
-                if(runtime.seconds()>3){
-                    completed+=.5;
+                if (runtime.seconds() > 2.2) {
+                    completed += .5;
 
                     fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                     bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -363,25 +369,24 @@ telemetry.addData("yeet","we won");
                     fl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
 
-
                     runtime.reset();
                 }
 
             }
-            if(completed==6.5){
-                fr.setTargetPosition(100);
+            if (completed == 6.5) {
+                fr.setTargetPosition(150);
                 fr.setPower(0.2);
 
-                fl.setTargetPosition(-100);
+                fl.setTargetPosition(-150);
                 fl.setPower(0.2);
 
-                br.setTargetPosition(100);
+                br.setTargetPosition(150);
                 br.setPower(0.2);
 
-                bl.setTargetPosition(-100);
+                bl.setTargetPosition(-150);
                 bl.setPower(0.2);
-                if(runtime.seconds()>1.5){
-                    completed+=.5;
+                if (runtime.seconds() > 1.5) {
+                    completed += .5;
 
                     fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                     bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -395,11 +400,10 @@ telemetry.addData("yeet","we won");
                     fl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
 
-
                     runtime.reset();
                 }
             }
-            if(completed==7){
+            if (completed == 7) {
                 leftIntakeFlipper.setPosition(1);
                 rightIntakeFlipper.setPosition(1);
                 conveyorTop.setPosition(.45);
@@ -414,7 +418,7 @@ telemetry.addData("yeet","we won");
                 fr.setPower(1);
                 intakeBucket.setPosition(0.15);
                 conveyor.setPower(-.45);
-                if(runtime.seconds()>3){
+                if (runtime.seconds() > 2.5) {
                     completed++;
 
 //                    fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -429,11 +433,10 @@ telemetry.addData("yeet","we won");
 //                    fl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
 
-
                     runtime.reset();
                 }
             }
-            if(completed==8){
+            if (completed == 8) {
                 leftIntakeFlipper.setPosition(1);
                 rightIntakeFlipper.setPosition(1);
                 intakeBucket.setPosition(.62);
@@ -443,12 +446,12 @@ telemetry.addData("yeet","we won");
                 fr.setPower(1);
                 intakeDrive.setPower(.8);
                 fwoppers.setPower(1);
-                if(runtime.seconds()>2){
+                if (runtime.seconds() > 2) {
                     runtime.reset();
                     completed++;
                 }
             }
-            if(completed==9){
+            if (completed == 9) {
                 intakeBucket.setPosition(.62);
                 br.setPower(1);
                 bl.setPower(1);
@@ -456,12 +459,12 @@ telemetry.addData("yeet","we won");
                 fr.setPower(1);
                 intakeDrive.setPower(-.8);
                 fwoppers.setPower(1);
-                if(runtime.seconds()>1.5){
+                if (runtime.seconds() > 1.5) {
                     runtime.reset();
                     completed++;
                 }
             }
-            if(completed==10){
+            if (completed == 10) {
                 br.setPower(1);
                 bl.setPower(1);
                 fl.setPower(1);
@@ -470,33 +473,62 @@ telemetry.addData("yeet","we won");
                 fwoppers.setPower(1);
                 intakeBucket.setPosition(0);
                 conveyor.setPower(-.45);
-                if(runtime.seconds()>.8){
+                if (runtime.seconds() > .8) {
                     runtime.reset();
-                   //g completed++;
+                    completed = 8;
+                    //g completed++;
                 }
             }
-            if(completed==11){
-//                br.setPower(1);
-//                bl.setPower(1);
-//                fl.setPower(1);
-//                fr.setPower(1);
-                intakeDrive.setPower(0);
-                fwoppers.setPower(1);
-                intakeBucket.setPosition(0);
-                if(runtime.seconds()>.8){
-                    runtime.reset();
-                    completed++;
-                }
+            if (completed == 42) {
+                fr.setTargetPosition(100);
+                fr.setPower(0.2);
+
+                fl.setTargetPosition(-100);
+                fl.setPower(0.2);
+
+                br.setTargetPosition(100);
+                br.setPower(0.2);
+
+                bl.setTargetPosition(-100);
+                bl.setPower(0.2);
             }
-/**/        if(completed==12) {
-                fl.setTargetPosition(-200);
-                fr.setTargetPosition(200);
-                bl.setTargetPosition(-200);
-                br.setTargetPosition(200);
-                completed++;
+            if (totalTime.seconds() > 29.5 && completed < 20) {
+
+                fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+
+                br.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                bl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                fr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                fl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                completed = 42;
             }
+//            if(completed==11){
+////                br.setPower(1);
+////                bl.setPower(1);
+////                fl.setPower(1);
+////                fr.setPower(1);
+//                intakeDrive.setPower(0);
+//                fwoppers.setPower(1);
+//                intakeBucket.setPosition(0);
+//                if(runtime.seconds()>.8){
+//                    runtime.reset();
+//                    completed++;
+//                }
+//            }
+///**/        if(completed==12) {
+//                fl.setTargetPosition(-200);
+//                fr.setTargetPosition(200);
+//                bl.setTargetPosition(-200);
+//                br.setTargetPosition(200);
+//                completed++;
+//            }
 /**/
             telemetry.update();
-        
+
+        }
     }
 }
