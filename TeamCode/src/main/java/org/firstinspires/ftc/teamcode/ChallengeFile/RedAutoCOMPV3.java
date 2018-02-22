@@ -107,10 +107,10 @@ public class RedAutoCOMPV3 extends LinearOpMode {
 
                 matchGlyph = glyph.getGlyph();
 
-                if (matchGlyph != null || runtime.seconds() > 1.2) {
+//                if (matchGlyph != null || runtime.seconds() > 1.2) {
                     completed++;
                     runtime.reset();
-                }
+//                }
             }
             telemetry.addData("glyph: ", matchGlyph);
 
@@ -118,13 +118,13 @@ public class RedAutoCOMPV3 extends LinearOpMode {
             if (completed == 1) {
                 if (color == 0) {
                     if (runtime.seconds() < 1) {
-                        jewelStick.setPosition(.29);
-                    } else if (runtime.seconds() < 2) {
-                        jewelStick.setPosition(.3);
-                    } else if (runtime.seconds() < 3) {
-                        jewelStick.setPosition(.28);
-                    } else if (runtime.seconds() < 4) {
                         jewelStick.setPosition(.275);
+                    } else if (runtime.seconds() < 2) {
+                        jewelStick.setPosition(.27);
+                    } else if (runtime.seconds() < 3) {
+                        jewelStick.setPosition(.285);
+                    } else if (runtime.seconds() < 4) {
+                        jewelStick.setPosition(.26);
                     }
                     //jewelStick.setPosition(.27);
 
@@ -186,7 +186,7 @@ public class RedAutoCOMPV3 extends LinearOpMode {
                         telemetry.addData("turning to", target);
                         // telemetry.addData("i", turn.turnT(target, 0.004, 0.001, 0.0, 1));
                         // telemetry.addData("i", turn.turnT(0, 0.0052, 0.002, 0.0, 1));
-                        isComplete = turn.turnT(target, 0.008, 0.0004, 0.0, 3);
+                        isComplete = turn.turnT(target, 0.007, 0.0003, 0.0, 3);
                         telemetry.addData("i", isComplete);
                         //isComplete = turn.turnT(target, p, 0, 0.0, 1);
                     }
@@ -198,7 +198,7 @@ public class RedAutoCOMPV3 extends LinearOpMode {
                     }
                     if (stage == 1) {
                         telemetry.addData("turning to 0", "ye");
-                        isComplete = turn.turnT(0, 0.007, .0003, 0.0, .5);
+                        isComplete = turn.turnT(0, 0.008, .0002, 0.0, .5);
 
                         // completed++;
                     }
@@ -268,7 +268,7 @@ public class RedAutoCOMPV3 extends LinearOpMode {
 
             if (completed == 3) {
 
-                isComplete = turn.turnT(90, 0.009, 0.0003, 0.0, .5);
+                isComplete = turn.turnT(90, 0.01, 0.001, 0.0, .5);
                 telemetry.addData("i", isComplete);
                 if (isComplete == 0 || runtime.seconds() > 3) {
                     completed++;
@@ -313,9 +313,8 @@ public class RedAutoCOMPV3 extends LinearOpMode {
             if (completed == 5) {
                 telemetry.addData("flippin it", "flipity dip");
                 conveyor.setPower(-1);
-                conveyor.setPower(-1);
-intakeBucket.setPosition(.62);
-                if (runtime.seconds() > 1.6) {
+                intakeBucket.setPosition(.62);
+                if (runtime.seconds() > 2) {
 
                     runtime.reset();
                     completed++;
@@ -417,7 +416,7 @@ intakeBucket.setPosition(.62);
                 fl.setPower(1);
                 fr.setPower(1);
                 intakeBucket.setPosition(0.15);
-                conveyor.setPower(-.45);
+                conveyor.setPower(-.6);
                 if (runtime.seconds() > 2.5) {
                     completed++;
 
@@ -440,6 +439,7 @@ intakeBucket.setPosition(.62);
                 leftIntakeFlipper.setPosition(1);
                 rightIntakeFlipper.setPosition(1);
                 intakeBucket.setPosition(.62);
+
                 br.setPower(1);
                 bl.setPower(1);
                 fl.setPower(1);
@@ -472,24 +472,25 @@ intakeBucket.setPosition(.62);
                 intakeDrive.setPower(0);
                 fwoppers.setPower(1);
                 intakeBucket.setPosition(0);
-                conveyor.setPower(-.45);
-                if (runtime.seconds() > .8) {
+                conveyor.setPower(-.6);
+                if (runtime.seconds() > 1.5) {
                     runtime.reset();
                     completed = 8;
                     //g completed++;
                 }
             }
             if (completed == 42) {
-                fr.setTargetPosition(100);
+                intakeDrive.setPower(-.8);
+                fr.setTargetPosition(400);
                 fr.setPower(0.2);
 
-                fl.setTargetPosition(-100);
+                fl.setTargetPosition(-400);
                 fl.setPower(0.2);
 
-                br.setTargetPosition(100);
+                br.setTargetPosition(400);
                 br.setPower(0.2);
 
-                bl.setTargetPosition(-100);
+                bl.setTargetPosition(-400);
                 bl.setPower(0.2);
             }
             if (totalTime.seconds() > 29.5 && completed < 20) {
